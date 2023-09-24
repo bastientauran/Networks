@@ -2,6 +2,10 @@ package model.network;
 
 /**
  * Class representing a MAC header
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
+ * @see MacAddress
  */
 public class MacHeader extends Header {
 

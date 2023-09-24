@@ -2,6 +2,9 @@ package model.network;
 
 /**
  * Abstract class representing a header
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
  */
 public abstract class Header {
     

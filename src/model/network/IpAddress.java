@@ -2,6 +2,9 @@ package model.network;
 
 /**
  * This class represents an IP address
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
  */
 public class IpAddress {
 

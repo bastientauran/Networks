@@ -2,6 +2,10 @@ package model.network;
 
 /**
  * Class representing an IP header
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
+ * @see IpAddress
  */
 public class IpHeader extends Header {
 

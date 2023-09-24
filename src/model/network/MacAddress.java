@@ -2,6 +2,9 @@ package model.network;
 
 /**
  * This class represents a MAC address
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
  */
 public class MacAddress {
 

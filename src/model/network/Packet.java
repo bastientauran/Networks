@@ -2,6 +2,15 @@ package model.network;
 
 import java.util.Stack;
 
+/**
+ * Class representing a packet.
+ * It is represented by a payload (with a size and an optional String representation),
+ * and headers, using a LIFO rule.
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
+ * @see Header
+ */
 public class Packet {
 
     /**

@@ -5,6 +5,9 @@ import model.network.MacAddress;
 
 /**
  * Class representing an interface.
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
  */
 public class Interface {
 

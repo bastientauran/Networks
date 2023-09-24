@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 /**
  * Abstract class representing a node
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
+ * @see Interface
  */
 public abstract class Node {
 
