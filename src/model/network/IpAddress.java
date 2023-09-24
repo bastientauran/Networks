@@ -182,17 +182,12 @@ public class IpAddress {
 
     @Override
     public String toString() {
-        String ret = String.valueOf(this.address[0]);
-        for (int i = 1; i < 4; i++) {
-            ret += "." + String.valueOf(this.address[i]);
-        }
-        ret += "/" + String.valueOf(this.mask);
-        return ret;
+        return toStringNoMask() + "/" + String.valueOf(this.mask);
     }
 
     /**
      * Get String representation of this IP address, without mask
-     * @return
+     * @return The String generated
      */
     public String toStringNoMask() {
         String ret = String.valueOf(this.address[0]);
