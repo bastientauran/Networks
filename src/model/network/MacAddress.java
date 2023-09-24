@@ -18,41 +18,41 @@ public class MacAddress {
     }
 
     /**
-     * Mac address constructor using array
+     * MAC address constructor using array
      * 
      * @param address The address to use
      */
     public MacAddress(int[] address) {
         if (address.length != 6) {
-            throw new IllegalArgumentException("Mac address constructor argument does not have 6 bytes");
+            throw new IllegalArgumentException("MAC address constructor argument does not have 6 bytes");
         }
         this.address = new int[6];
 
         for (int i = 0; i < 6; i++) {
             int element = address[i];
             if (element < 0 || element > 255) {
-                throw new IllegalArgumentException("MAC address bytes must be between 0 and 255");
+                throw new IllegalArgumentException("MAC address bytes must be between 0 and 255: " + element);
             }
             this.address[i] = element;
         }
     }
 
     /**
-     * Mac address constructor using string
+     * MAC address constructor using string
      * 
      * @param address The address to use, must use format XX:XX:XX:XX:XX:XX
      */
     public MacAddress(String address) {
         String[] elements = address.split(":");
         if (elements.length != 6) {
-            throw new IllegalArgumentException("Mac address constructor argument does not have 6 bytes");
+            throw new IllegalArgumentException("MAC address constructor argument does not have 6 bytes: " + address);
         }
         this.address = new int[6];
 
         for (int i = 0; i < 6; i++) {
-            int element = Integer.parseInt(elements[i], 16);  
+            int element = Integer.parseInt(elements[i], 16);
             if (element < 0 || element > 255) {
-                throw new IllegalArgumentException("MAC address bytes must be between 0 and 255");
+                throw new IllegalArgumentException("MAC address bytes must be between 0 and 255: " + element);
             }
             this.address[i] = element;
         }
