@@ -1,7 +1,9 @@
 package unitary;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -59,6 +61,25 @@ public class IpAddressTest {
 
       address = new IpAddress("192.168.100.1/23");
       assertEquals(address.getNetwork().toString(), "192.168.100.0/23");
+   }
+
+   @Test
+   public void testIsInNetwork() {
+      IpAddress address = new IpAddress("192.168.100.1/32");
+      IpAddress network = new IpAddress("192.168.100.0/24");
+      assertTrue(address.isInNetwork(network));
+
+      address = new IpAddress("192.168.100.1/32");
+      network = new IpAddress("192.168.109.0/24");
+      assertFalse(address.isInNetwork(network));
+
+      address = new IpAddress("192.168.111.190/24");
+      network = new IpAddress("192.168.100.0/18");
+      assertTrue(address.isInNetwork(network));
+
+      address = new IpAddress("1.2.3.4/24");
+      network = new IpAddress("0.0.0.0/0");
+      assertTrue(address.isInNetwork(network));
    }
 
    @Test

@@ -6,6 +6,11 @@ package model.network;
 public class MacAddress {
 
     /**
+     * Size of a MAC address in a MAC header
+     */
+    public static final int SIZE_BYTES = 6;
+
+    /**
      * Array of 6 bytes representing a MAC address
      */
     private int[] address;
@@ -55,6 +60,18 @@ public class MacAddress {
                 throw new IllegalArgumentException("MAC address bytes must be between 0 and 255: " + element);
             }
             this.address[i] = element;
+        }
+    }
+
+    /**
+     * MAC address copy constructor
+     * 
+     * @param address The address to copy
+     */
+    public MacAddress(MacAddress other) {
+        this.address = new int[6];
+        for (int i = 0; i < 6; i++) {
+            this.address[i] = other.address[i];
         }
     }
 

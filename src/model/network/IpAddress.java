@@ -6,6 +6,11 @@ package model.network;
 public class IpAddress {
 
     /**
+     * Size of an IP address in an IP header, without mask
+     */
+    public static final int SIZE_NO_MASK_BYTES = 4;
+
+    /**
      * Array of 4 bytes representing a MAC address
      */
     private int[] address;
@@ -123,6 +128,17 @@ public class IpAddress {
         }
 
         return network;
+    }
+
+    /**
+     * Test if current IP address is in given IP network
+     * @param network The IP network
+     * @return True if the address is in this network
+     */
+    public boolean isInNetwork(IpAddress network) {
+        IpAddress ipAddress = new IpAddress(this);
+        ipAddress.mask = network.mask;
+        return ipAddress.getNetwork().equals(network.getNetwork());
     }
 
     @Override
