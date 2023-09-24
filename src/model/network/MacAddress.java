@@ -66,7 +66,7 @@ public class MacAddress {
     /**
      * MAC address copy constructor
      * 
-     * @param address The address to copy
+     * @param other The address to copy
      */
     public MacAddress(MacAddress other) {
         this.address = new int[6];

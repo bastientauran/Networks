@@ -1,4 +1,5 @@
 lib
 bin
 doc/outputUml*
+doc/javadoc*
 .vscode

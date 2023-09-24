@@ -37,6 +37,15 @@ public class IpAddressTest {
    }
 
    @Test
+   public void testToStringNoMask() {
+      IpAddress address = new IpAddress("192.168.0.1/14");
+      assertEquals(address.toStringNoMask(), "192.168.0.1");
+
+      address = new IpAddress("192.168.100.192/14");
+      assertEquals(address.toStringNoMask(), "192.168.100.192");
+   }
+
+   @Test
    public void testNetworks() {
       IpAddress address = new IpAddress("192.168.100.1/24");
       assertEquals(address.getNetwork().toString(), "192.168.100.0/24");

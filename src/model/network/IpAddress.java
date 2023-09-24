@@ -90,7 +90,7 @@ public class IpAddress {
     /**
      * IP address copy constructor
      * 
-     * @param address The address to copy
+     * @param other The address to copy
      */
     public IpAddress(IpAddress other) {
         this.mask = other.mask;
@@ -166,6 +166,18 @@ public class IpAddress {
             ret += "." + String.valueOf(this.address[i]);
         }
         ret += "/" + String.valueOf(this.mask);
+        return ret;
+    }
+
+    /**
+     * Get String representation of this IP address, without mask
+     * @return
+     */
+    public String toStringNoMask() {
+        String ret = String.valueOf(this.address[0]);
+        for (int i = 1; i < 4; i++) {
+            ret += "." + String.valueOf(this.address[i]);
+        }
         return ret;
     }
 }

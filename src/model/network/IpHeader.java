@@ -1,5 +1,8 @@
 package model.network;
 
+/**
+ * Class representing an IP header
+ */
 public class IpHeader extends Header {
 
     /**
@@ -46,10 +49,13 @@ public class IpHeader extends Header {
         return new IpAddress(this.destination);
     }
 
-
     @Override
     public int getSize() {
-        return IpAddress.SIZE_NO_MASK_BYTES;
+        return 2*IpAddress.SIZE_NO_MASK_BYTES;
     }
-    
+
+    @Override
+    public String toString() {
+        return "[IP header: source=" + this.source.toStringNoMask() + ", destination=" + this.destination.toStringNoMask() + "]";
+    }
 }

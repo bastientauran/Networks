@@ -1,5 +1,8 @@
 package model.network;
 
+/**
+ * Abstract class representing a header
+ */
 public abstract class Header {
     
     /**

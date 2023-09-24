@@ -1,5 +1,8 @@
 package model.network;
 
+/**
+ * Class representing a MAC header
+ */
 public class MacHeader extends Header {
 
     /**
@@ -46,10 +49,13 @@ public class MacHeader extends Header {
         return new MacAddress(this.destination);
     }
 
-
     @Override
     public int getSize() {
-        return MacAddress.SIZE_BYTES;
+        return 2*MacAddress.SIZE_BYTES;
     }
-    
+
+    @Override
+    public String toString() {
+        return "[MAC header: source=" + this.source + ", destination=" + this.destination + "]";
+    }
 }
