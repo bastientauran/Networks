@@ -93,11 +93,29 @@ public class IpAddress {
      * @param other The address to copy
      */
     public IpAddress(IpAddress other) {
-        this.mask = other.mask;
         this.address = new int[4];
         for (int i = 0; i < 4; i++) {
             this.address[i] = other.address[i];
         }
+        this.mask = other.mask;
+    }
+
+    /**
+     * IP address copy constructor with new mask
+     * 
+     * @param other The address to copy
+     * @param mask The new mask
+     */
+    public IpAddress(IpAddress other, int mask) {
+        this.address = new int[4];
+        for (int i = 0; i < 4; i++) {
+            this.address[i] = other.address[i];
+        }
+
+        if (mask < 0 || mask > 32) {
+            throw new IllegalArgumentException("IP address mask must be between 0 and 32: " + mask);
+        }
+        this.mask = mask;
     }
 
     /**

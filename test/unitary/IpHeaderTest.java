@@ -19,8 +19,8 @@ public class IpHeaderTest {
    @Test
    public void testConstructor() {
       IpHeader header = new IpHeader(new IpAddress("192.168.0.1/24"), new IpAddress("192.168.2.4/24"));
-      assertEquals(header.getSource().toString(), "192.168.0.1/24");
-      assertEquals(header.getDestination().toString(), "192.168.2.4/24");
+      assertEquals(header.getSource().toString(), "192.168.0.1/32");
+      assertEquals(header.getDestination().toString(), "192.168.2.4/32");
    }
 
    @Test

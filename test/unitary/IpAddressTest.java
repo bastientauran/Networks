@@ -30,6 +30,12 @@ public class IpAddressTest {
    }
 
    @Test
+   public void testConstructorCopyNewMask() {
+      IpAddress address = new IpAddress("10.10.16.65/24");
+      assertEquals(new IpAddress(address, 30).toString(), "10.10.16.65/30");
+   }
+
+   @Test
    public void testEquals() {
       IpAddress address1 = new IpAddress(new int[] { 192, 168, 0, 1 }, 20);
       IpAddress address2 = new IpAddress("192.168.0.1/20");

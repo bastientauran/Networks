@@ -29,8 +29,8 @@ public class IpHeader extends Header {
      * @param destination Destination IP address
      */
     public IpHeader(IpAddress source, IpAddress destination) {
-        this.source = new IpAddress(source);
-        this.destination = new IpAddress(destination);
+        this.source = new IpAddress(source, 32);
+        this.destination = new IpAddress(destination, 32);
     }
 
     /**
