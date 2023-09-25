@@ -6,7 +6,7 @@ package model.network;
  * @author Bastien Tauran
  * @version 1.0
  */
-public class MacAddress {
+public class MacAddress implements Comparable<MacAddress> {
 
     /**
      * Size of a MAC address in a MAC header
@@ -103,5 +103,15 @@ public class MacAddress {
             ret += ":" + String.format("%02X", this.address[i]);
         }
         return ret;
+    }
+
+    @Override
+    public int compareTo(MacAddress other) {
+        for (int i = 0; i < 6; i++) {
+            if(this.address[i] != other.address[i]) {
+                return this.address[i] - other.address[i];
+            }
+        }
+        return 0;
     }
 }

@@ -2,6 +2,7 @@ package model.nodes;
 
 import model.network.IpAddress;
 import model.network.MacAddress;
+import model.network.MacAddressContainer;
 
 /**
  * Class representing an interface.
@@ -12,6 +13,11 @@ import model.network.MacAddress;
 public class Interface {
 
     /**
+     * Name of this interface
+     */
+    private String name;
+
+    /**
      * MAC address of this interface
      */
     private MacAddress macAddress;
@@ -20,4 +26,22 @@ public class Interface {
      * IP address of this interface
      */
     private IpAddress ipAddress;
+
+    /**
+     * Create a new interface
+     * 
+     * @param name Name of the interface
+     */
+    public Interface(String name) {
+        this.name = name;
+        this.macAddress = MacAddressContainer.getInstance().getNewMacAddress();
+        this.ipAddress = new IpAddress();
+    }
+
+
+    @Override
+    public String toString() {
+        return "[ Interface " + this.name + ", macAddress='" + this.macAddress + "', ipAddress='" + this.ipAddress + "']";
+    }
+
 }
