@@ -18,9 +18,9 @@ public class MacHeaderTest {
 
    @Test
    public void testConstructor() {
-      MacHeader header = new MacHeader(new MacAddress("AA:BB:CC:DD:1E:F0"), new MacAddress("22:11:87:65:A5:9D"));
-      assertEquals(header.getSource().toString(), "AA:BB:CC:DD:1E:F0");
-      assertEquals(header.getDestination().toString(), "22:11:87:65:A5:9D");
+      MacHeader header = new MacHeader(new MacAddress("AA:BB:CC:DD:2E:F0"), new MacAddress("22:14:87:65:A5:9D"));
+      assertEquals(header.getSource().toString(), "AA:BB:CC:DD:2E:F0");
+      assertEquals(header.getDestination().toString(), "22:14:87:65:A5:9D");
    }
 
    @Test
@@ -31,7 +31,7 @@ public class MacHeaderTest {
 
    @Test
    public void testToString() {
-      MacHeader header = new MacHeader(new MacAddress("AA:BB:CC:DD:1E:F0"), new MacAddress("22:11:87:65:A5:9D"));
-      assertEquals(header.toString(), "[MAC header: source=AA:BB:CC:DD:1E:F0, destination=22:11:87:65:A5:9D]");
+      MacHeader header = new MacHeader(new MacAddress("AA:BB:CC:DD:1E:F1"), new MacAddress("22:11:87:65:A5:7D"));
+      assertEquals(header.toString(), "[MAC header: source=AA:BB:CC:DD:1E:F1, destination=22:11:87:65:A5:7D]");
    }
 }

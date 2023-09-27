@@ -29,9 +29,11 @@ public class MacAddressTest {
 
    @Test
    public void testEquals() {
-      MacAddress address1 = new MacAddress(new int[] { 0, 5, 6, 22, 7, 15 });
-      MacAddress address2 = new MacAddress("00:05:06:16:07:0F");
-      assertEquals(address1, address2);
+      MacAddress address = new MacAddress(new int[] { 0, 5, 6, 22, 7, 14 });
+      assertThrows(
+            IllegalStateException.class,
+            () -> new MacAddress("00:05:06:16:07:0E"));
+      assertEquals(address.toString(), "00:05:06:16:07:0E");
    }
 
    @Test

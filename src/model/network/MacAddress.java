@@ -43,6 +43,10 @@ public class MacAddress implements Comparable<MacAddress> {
             }
             this.address[i] = element;
         }
+
+        if(!MacAddressContainer.getInstance().addMacAddress(this)) {
+            throw new IllegalStateException("Address already in MAC address container: " + this);
+        }
     }
 
     /**
@@ -63,6 +67,10 @@ public class MacAddress implements Comparable<MacAddress> {
                 throw new IllegalArgumentException("MAC address bytes must be between 0 and 255: " + element);
             }
             this.address[i] = element;
+        }
+
+        if(!MacAddressContainer.getInstance().addMacAddress(this)) {
+            throw new IllegalStateException("Address already in MAC address container: " + this);
         }
     }
 
