@@ -101,7 +101,6 @@ public class Time implements Comparable<Time> {
         ;
 
         if (time.seconds < 0) {
-            System.out.println("Time cannot be negative");
             throw new IllegalStateException("Time cannot be negative");
         }
 

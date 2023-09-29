@@ -73,7 +73,7 @@ public class Simulator {
     }
 
     /**
-     * Schedule a new event, if date of execution is lower than stopTime
+     * Schedule a new event
      * 
      * @param time      Time to schedule the event
      * @param instance  The instance to launch
@@ -84,10 +84,8 @@ public class Simulator {
         if (time.compareTo(this.currentTime) < 0) {
             throw new IllegalArgumentException("Cannot schedule in the past");
         }
-        if (time.compareTo(this.stopTime) < 0) {
-            Event e = new Event(time, instance, method, arguments);
-            this.events.add(e);
-        }
+        Event e = new Event(time, instance, method, arguments);
+        this.events.add(e);
     }
 
     /**
@@ -98,6 +96,9 @@ public class Simulator {
         while (!this.events.isEmpty()) {
             Event e = this.events.pollFirst();
             this.currentTime = e.getTime();
+            if (this.currentTime.compareTo(this.stopTime) > 0) {
+                break;
+            }
             e.runEvent();
         }
     }
