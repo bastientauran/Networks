@@ -1,6 +1,5 @@
 package model.simulator;
 
-import java.util.ArrayList;
 import java.util.TreeSet;
 
 /**
@@ -55,6 +54,15 @@ public class Simulator {
     }
 
     /**
+     * Reset the simulation
+     */
+    public void reset() {
+        this.currentTime = new Time();
+        this.stopTime = new Time();
+        this.events = new TreeSet<Event>();
+    }
+
+    /**
      * Set the time where the simulation will be stopped
      * 
      * @param stopTime Time where the simulation will be stopped
@@ -80,7 +88,7 @@ public class Simulator {
      * @param method    The method of instance to launch
      * @param arguments The arguments of the method
      */
-    public void schedule(Time time, Schedulable instance, String method, ArrayList<Object> arguments) {
+    public void schedule(Time time, Schedulable instance, String method, Object[] arguments) {
         if (time.compareTo(this.currentTime) < 0) {
             throw new IllegalArgumentException("Cannot schedule in the past");
         }

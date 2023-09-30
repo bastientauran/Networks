@@ -1,7 +1,5 @@
 package model.simulator;
 
-import java.util.ArrayList;
-
 /**
  * Class representing a event.
  * This is a method of chosen instance to launch at desired date.
@@ -29,7 +27,7 @@ public class Event implements Comparable<Event> {
     /**
      * The arguments of the method
      */
-    private ArrayList<Object> arguments;
+    private Object[] arguments;
 
     /**
      * ID of the event
@@ -44,7 +42,7 @@ public class Event implements Comparable<Event> {
      * @param method    The method of instance to launch
      * @param arguments The arguments of the method
      */
-    public Event(Time time, Schedulable instance, String method, ArrayList<Object> arguments) {
+    public Event(Time time, Schedulable instance, String method, Object[] arguments) {
         this.time = time;
         this.instance = instance;
         this.method = method;

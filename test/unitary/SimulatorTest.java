@@ -2,8 +2,6 @@ package unitary;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-
 import org.junit.Test;
 
 import model.simulator.Schedulable;
@@ -20,7 +18,7 @@ public class SimulatorTest {
 
         public String totalString;
 
-        public DummyMethods(){
+        public DummyMethods() {
             this.valueInt = 0;
             this.valueString = "";
             this.valueTime = null;
@@ -40,20 +38,20 @@ public class SimulatorTest {
         }
 
         @Override
-        public void run(String method, ArrayList<Object> arguments) {
+        public void run(String method, Object[] arguments) {
             switch (method) {
                 case "method1": {
-                    if (arguments.size() != 1) {
+                    if (arguments.length != 1) {
                         throw new IllegalArgumentException("method1 of class SummyMethods must have one argument");
                     }
-                    method1((int) arguments.get(0));
+                    method1((int) arguments[0]);
                     break;
                 }
                 case "method2": {
-                    if (arguments.size() != 2) {
+                    if (arguments.length != 2) {
                         throw new IllegalArgumentException("method2 of class SummyMethods must have one argument");
                     }
-                    method2((String) arguments.get(0), (Time) arguments.get(1));
+                    method2((String) arguments[0], (Time) arguments[1]);
                     break;
                 }
                 default: {
@@ -65,11 +63,13 @@ public class SimulatorTest {
 
     @Test
     public void testSingletonTemplate() {
+        Simulator.getInstance().reset();
         assertEquals(Simulator.getInstance(), Simulator.getInstance());
     }
 
     @Test
     public void testinitialTime() {
+        Simulator.getInstance().reset();
         assertEquals(Simulator.getInstance().getCurrentTime(), new Time());
         assertEquals(Simulator.getInstance().getCurrentTime().toString(), "0s0ns");
     }
@@ -77,21 +77,13 @@ public class SimulatorTest {
     @Test
     public void testScheduling() {
         DummyMethods d1 = new DummyMethods();
-        ArrayList<Object> args1 = new ArrayList<Object>();
-        args1.add(1);
-        ArrayList<Object> args2 = new ArrayList<Object>();
-        args2.add("test");
-        args2.add(new Time(4, 100));
-        ArrayList<Object> args3 = new ArrayList<Object>();
-        args3.add(-40);
-        ArrayList<Object> args4 = new ArrayList<Object>();
-        args4.add("other");
-        args4.add(new Time(14, 3000));
+        Simulator.getInstance().reset();
         Simulator.getInstance().setStopTime(new Time(10, 0));
-        Simulator.getInstance().schedule(new Time(5, 0), d1, "method1", args1);
-        Simulator.getInstance().schedule(new Time(1, 0), d1, "method2", args2);
-        Simulator.getInstance().schedule(new Time(5, 10), d1, "method1", args3);
-        Simulator.getInstance().schedule(new Time(5, 1), d1, "method2", args4);
+        Simulator.getInstance().schedule(new Time(5, 0), d1, "method1", new Object[] { 1 });
+        Simulator.getInstance().schedule(new Time(1, 0), d1, "method2", new Object[] { "test", new Time(4, 100) });
+        Simulator.getInstance().schedule(new Time(5, 10), d1, "method1", new Object[] { -40 });
+        Simulator.getInstance().schedule(new Time(5, 1), d1, "method2", new Object[] { "other", new Time(14, 3000) });
+        Simulator.getInstance().schedule(new Time(15, 0), d1, "method1", new Object[] { 21 });
         Simulator.getInstance().run();
         assertEquals(-40, d1.valueInt);
         assertEquals("other", d1.valueString);
