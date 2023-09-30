@@ -1,5 +1,7 @@
 package model.simulator;
 
+import model.network.Packet;
+
 /**
  * Enumeration giving the methods that can be scheduled
  * 
@@ -10,7 +12,10 @@ package model.simulator;
  */
 public enum SchedulableMethod {
     DUMMY_CLASS__METHOD_1("DummyClass", "method1", new Class<?>[] { Integer.class }),
-    DUMMY_CLASS__METHOD_2("DummyClass", "method2", new Class<?>[] { String.class, Time.class });
+    DUMMY_CLASS__METHOD_2("DummyClass", "method2", new Class<?>[] { String.class, Time.class }),
+    POINT_TO_POINT_LINK__END_TX("PointToPointLink", "endTx", new Class<?>[] { Packet.class, Integer.class }),
+    POINT_TO_POINT_LINK__START_RX("PointToPointLink", "startRx", new Class<?>[] { Packet.class, Integer.class }),
+    POINT_TO_POINT_LINK__END_RX("PointToPointLink", "endRx", new Class<?>[] { Packet.class, Integer.class });
 
     private String className;
     private String methodName;
@@ -32,6 +37,7 @@ public enum SchedulableMethod {
 
     /**
      * Get the name of the class that launch this method
+     * 
      * @return The name of the class that launch this method
      */
     public String getClassName() {
@@ -40,6 +46,7 @@ public enum SchedulableMethod {
 
     /**
      * Get the name of the method
+     * 
      * @return The name of the method
      */
     public String getMethodName() {
@@ -48,6 +55,7 @@ public enum SchedulableMethod {
 
     /**
      * Get the array containing all the argument types needed by this method
+     * 
      * @return The array containing all the argument types needed by this method
      */
     public Class<?>[] getArgumentTypes() {
