@@ -1,10 +1,13 @@
 package unitary;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 
+import model.network.MacAddress;
 import model.simulator.Schedulable;
+import model.simulator.SchedulableMethod;
 import model.simulator.Simulator;
 import model.simulator.Time;
 
@@ -38,19 +41,13 @@ public class SimulatorTest {
         }
 
         @Override
-        public void run(String method, Object[] arguments) {
+        public void run(SchedulableMethod method, Object[] arguments) {
             switch (method) {
-                case "method1": {
-                    if (arguments.length != 1) {
-                        throw new IllegalArgumentException("method1 of class SummyMethods must have one argument");
-                    }
+                case DUMMY_CLASS__METHOD_1: {
                     method1((int) arguments[0]);
                     break;
                 }
-                case "method2": {
-                    if (arguments.length != 2) {
-                        throw new IllegalArgumentException("method2 of class SummyMethods must have one argument");
-                    }
+                case DUMMY_CLASS__METHOD_2: {
                     method2((String) arguments[0], (Time) arguments[1]);
                     break;
                 }
@@ -76,18 +73,39 @@ public class SimulatorTest {
 
     @Test
     public void testScheduling() {
-        DummyMethods d1 = new DummyMethods();
+        DummyMethods d = new DummyMethods();
         Simulator.getInstance().reset();
         Simulator.getInstance().setStopTime(new Time(10, 0));
-        Simulator.getInstance().schedule(new Time(5, 0), d1, "method1", new Object[] { 1 });
-        Simulator.getInstance().schedule(new Time(1, 0), d1, "method2", new Object[] { "test", new Time(4, 100) });
-        Simulator.getInstance().schedule(new Time(5, 10), d1, "method1", new Object[] { -40 });
-        Simulator.getInstance().schedule(new Time(5, 1), d1, "method2", new Object[] { "other", new Time(14, 3000) });
-        Simulator.getInstance().schedule(new Time(15, 0), d1, "method1", new Object[] { 21 });
+
+        Simulator.getInstance().schedule(new Time(5, 0), d, SchedulableMethod.DUMMY_CLASS__METHOD_1, 1);
+        Simulator.getInstance().schedule(new Time(1, 0), d, SchedulableMethod.DUMMY_CLASS__METHOD_2, "test",
+                new Time(4, 100));
+        Simulator.getInstance().schedule(new Time(5, 10), d, SchedulableMethod.DUMMY_CLASS__METHOD_1, -40);
+        Simulator.getInstance().schedule(new Time(5, 1), d, SchedulableMethod.DUMMY_CLASS__METHOD_2, "other",
+                new Time(14, 3000));
+        Simulator.getInstance().schedule(new Time(15, 0), d, SchedulableMethod.DUMMY_CLASS__METHOD_1, 21);
         Simulator.getInstance().run();
-        assertEquals(-40, d1.valueInt);
-        assertEquals("other", d1.valueString);
-        assertEquals(new Time(14, 3000), d1.valueTime);
-        assertEquals("test1other-40", d1.totalString);
+
+        assertEquals(-40, d.valueInt);
+        assertEquals("other", d.valueString);
+        assertEquals(new Time(14, 3000), d.valueTime);
+        assertEquals("test1other-40", d.totalString);
+    }
+
+    @Test
+    public void testSchedulingError() {
+        DummyMethods d = new DummyMethods();
+        Simulator.getInstance().reset();
+        Simulator.getInstance().setStopTime(new Time(10, 0));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Simulator.getInstance().schedule(new Time(5, 0), d, SchedulableMethod.DUMMY_CLASS__METHOD_1,
+                        1.5));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Simulator.getInstance().schedule(new Time(1, 0), d, SchedulableMethod.DUMMY_CLASS__METHOD_2,
+                        "test",
+                        new MacAddress()));
     }
 }

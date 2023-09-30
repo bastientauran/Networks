@@ -7,6 +7,7 @@ package model.simulator;
  * @author Bastien Tauran
  * @version 1.0
  * @see Schedulable
+ * @see SchedulableMethod
  */
 public class Event implements Comparable<Event> {
     /**
@@ -22,7 +23,7 @@ public class Event implements Comparable<Event> {
     /**
      * The method of instance to launch
      */
-    private String method;
+    private SchedulableMethod method;
 
     /**
      * The arguments of the method
@@ -42,7 +43,7 @@ public class Event implements Comparable<Event> {
      * @param method    The method of instance to launch
      * @param arguments The arguments of the method
      */
-    public Event(Time time, Schedulable instance, String method, Object[] arguments) {
+    public Event(Time time, Schedulable instance, SchedulableMethod method, Object[] arguments) {
         this.time = time;
         this.instance = instance;
         this.method = method;

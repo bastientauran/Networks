@@ -14,5 +14,5 @@ public interface Schedulable {
      * @param method    The method to launch
      * @param arguments The arguments to add to this method
      */
-    public void run(String method, Object[] arguments);
+    public void run(SchedulableMethod method, Object[] arguments);
 }
