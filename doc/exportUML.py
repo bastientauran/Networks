@@ -167,6 +167,13 @@ for f in getPaths():
                 index = lineParsed.split().index("implements")
                 for elt in lineParsed.split()[index+1].split(','):
                     implements.append((className, elt))
+        if nbAccol == 1 \
+                and classes[-1].classType == ClassType.ENUM \
+                and (';' in line or ',' in line) \
+                and (line.count('{') == line.count('}')) \
+                and len(line.split('(')[0].strip().split()) == 1:
+            classes[-1].enumTypes.append(line.replace(';','').replace(',','').split('(')[0].strip())
+            continue
         if nbAccol == 1 and '(' in line and not '=' in line:
             lineParsed = line.replace('{','').strip()
             m = Method()
@@ -181,9 +188,6 @@ for f in getPaths():
             m.additional = parseAdditional(signature)
             m.arguments = parseArguments(args)
             classes[-1].methods.append(m)
-        if nbAccol == 1 and classes[-1].classType == ClassType.ENUM and (';' in line or ',' in line):
-            classes[-1].enumTypes.append(line.replace(';','').replace(',','').strip())
-            continue
         if nbAccol == 1 and ';' in line and (not '(' in line or '=' in line):
             lineParsed = line.replace(';','').split('=')[0].strip()
             a = Attribute()

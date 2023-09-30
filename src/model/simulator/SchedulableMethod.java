@@ -6,7 +6,7 @@ package model.simulator;
  * @author Bastien Tauran
  * @version 1.0
  * @see Event
- * @see SImulator
+ * @see Simulator
  */
 public enum SchedulableMethod {
     DUMMY_CLASS__METHOD_1("DummyClass", "method1", new Class<?>[] { Integer.class }),
