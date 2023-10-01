@@ -66,7 +66,7 @@ public class Time implements Comparable<Time> {
      * Add argument time with the current time.
      * It does not modify current reference, nor the argument
      * 
-     * @param other The time to add to current time
+     * @param toAdd The time to add to current time
      * @return The time being the sum of current and argument
      */
     public Time add(Time toAdd) {

@@ -1,6 +1,10 @@
 package model.nodes;
 
+import model.network.IpAddress;
+import model.network.IpHeader;
 import model.network.Packet;
+import model.simulator.SchedulableMethod;
+import model.utils.Pair;
 
 /**
  * Class representing a End Device
@@ -22,11 +26,27 @@ public class EndDevice extends Node {
 
     @Override
     public void send(Packet packet) {
-        // TODO send to correct interface
+        IpHeader ipHeader = (IpHeader) packet.peekHeader();
+        Pair<Interface, IpAddress> routingEntry = this.routingTable.getEntry(ipHeader.getDestination());
+
+        routingEntry.first.enque(packet, routingEntry.second);
     }
 
     @Override
     public void receive(Packet packet) {
         System.out.println("Received packet " + packet);
+    }
+
+    @Override
+    public void run(SchedulableMethod method, Object[] arguments) {
+        switch (method) {
+            case END_DEVICE_SEND: {
+                send((Packet) arguments[0]);
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("Unknow method for class EndDevice: " + method);
+            }
+        }
     }
 }

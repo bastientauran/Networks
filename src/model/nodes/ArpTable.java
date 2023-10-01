@@ -1,6 +1,6 @@
 package model.nodes;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import model.network.IpAddress;
 import model.network.MacAddress;
@@ -19,13 +19,13 @@ public class ArpTable {
     /**
      * ARP table
      */
-    private HashMap<IpAddress, MacAddress> table;
+    private TreeMap<IpAddress, MacAddress> table;
 
     /**
      * Construct a new APR table
      */
     public ArpTable() {
-        this.table = new HashMap<IpAddress, MacAddress>();
+        this.table = new TreeMap<IpAddress, MacAddress>();
     }
 
     /**

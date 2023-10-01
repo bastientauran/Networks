@@ -6,6 +6,7 @@ import model.link.Link;
 import model.network.IpAddress;
 import model.network.MacAddress;
 import model.network.MacAddressContainer;
+import model.network.MacHeader;
 import model.network.Packet;
 
 /**
@@ -76,6 +77,7 @@ public class Interface {
         this.ipAddress = new IpAddress();
         this.node = node;
         this.link = link;
+        this.link.attachInterface(this);
         this.queue = new LinkedList<Packet>();
         this.queueSizeMaxPackets = 1000;
         this.isSending = false;
@@ -85,15 +87,25 @@ public class Interface {
     /**
      * Add a packet to the queue, if possible
      * 
-     * @param packet The packet to add
+     * @param packet  The packet to add
+     * @param nextHop Ip address of next hop
      * @return True if the packet has been added, False otherwise
      */
-    public boolean enque(Packet packet) {
+    public boolean enque(Packet packet, IpAddress nextHop) {
+        ArpTable arpTable = this.node.getArpTable();
+        MacAddress dstMacAddress = arpTable.getEntry(nextHop);
 
-        // TODO insert MAC header
+        if (dstMacAddress == null) {
+            System.out.println("Do not know destination MAC address, dropping packet");
+            return false;
+        }
+
+        MacHeader macHeader = new MacHeader(this.macAddress, dstMacAddress);
+        packet.addHeader(macHeader);
 
         if (this.queue.isEmpty() && !this.isSending) {
             this.startTx(packet);
+            return true;
         }
 
         if (this.queue.size() == this.queueSizeMaxPackets) {
@@ -105,11 +117,18 @@ public class Interface {
     }
 
     /**
-     * Receive a new packet from link
+     * Receive a new packet from link.
+     * Drop it if destination MAC address is incorrect
+     * 
      * @param packet The packet received
      */
     public void receive(Packet packet) {
-        this.node.receive(packet);
+
+        MacHeader macHeader = (MacHeader) packet.popHeader();
+
+        if (macHeader.getDestination() == this.macAddress) {
+            this.node.receive(packet);
+        }
     }
 
     /**
@@ -170,6 +189,15 @@ public class Interface {
      */
     public void setIpAddress(IpAddress ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    /**
+     * Get MAC address of this itnerface
+     * 
+     * @return MAC address of this interface
+     */
+    public MacAddress getMacAddress() {
+        return this.macAddress;
     }
 
     /**

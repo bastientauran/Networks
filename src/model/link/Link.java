@@ -19,4 +19,11 @@ public abstract class Link {
      * @param src    The source interface
      */
     public abstract void startTx(Packet packet, Interface src);
+
+    /**
+     * Attach an interface to this link
+     * 
+     * @param interf The interface to attach
+     */
+    public abstract void attachInterface(Interface interf);
 }

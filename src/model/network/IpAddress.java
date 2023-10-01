@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author Bastien Tauran
  * @version 1.0
  */
-public class IpAddress {
+public class IpAddress implements Comparable<IpAddress> {
 
     /**
      * Size of an IP address in an IP header, without mask
@@ -66,12 +66,18 @@ public class IpAddress {
      */
     public IpAddress(String address) {
         String[] elts = address.split("/");
-        if (elts.length != 2) {
+        if (elts.length > 2) {
             throw new IllegalArgumentException(
-                    "IP address constructor argument must have an address and a netmask: " + address);
+                    "IP address constructor argument must have an address and optionnally a netmask: " + address);
         }
 
-        int mask = Integer.parseInt(elts[1]);
+        int mask;
+        if (elts.length == 2) {
+            mask = Integer.parseInt(elts[1]);
+        } else {
+            mask = 32;
+        }
+
         if (mask < 0 || mask > 32) {
             throw new IllegalArgumentException("IP address mask must be between 0 and 32: " + elts[1]);
         }
@@ -109,7 +115,7 @@ public class IpAddress {
      * IP address copy constructor with new mask
      * 
      * @param other The address to copy
-     * @param mask The new mask
+     * @param mask  The new mask
      */
     public IpAddress(IpAddress other, int mask) {
         this.address = new int[4];
@@ -190,6 +196,19 @@ public class IpAddress {
         }
 
         return this.mask == ipAddress.mask;
+    }
+
+    @Override
+    public int compareTo(IpAddress other) {
+        if (this.mask != other.mask) {
+            return this.mask - other.mask;
+        }
+        for (int i = 0; i < 4; i++) {
+            if (this.address[i] != other.address[i]) {
+                return this.address[i] - other.address[i];
+            }
+        }
+        return 0;
     }
 
     @Override

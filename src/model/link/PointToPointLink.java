@@ -20,6 +20,15 @@ public class PointToPointLink extends Link implements Schedulable {
         public Interface src;
         public Interface dst;
         boolean isTransmitting;
+
+        /**
+         * Create a new DirectionStruct
+         */
+        public DirectionStruct() {
+            this.src = null;
+            this.dst = null;
+            this.isTransmitting = false;
+        }
     }
 
     /**
@@ -53,15 +62,10 @@ public class PointToPointLink extends Link implements Schedulable {
     public PointToPointLink() {
         this.delay = new Time(1, 0);
         this.bandwidthBytesPerSecond = 1000000L;
-        this.directions = new DirectionStruct[2];
+        this.directions = new DirectionStruct[] { new DirectionStruct(), new DirectionStruct() };
         this.interfacesConnected = 0;
     }
 
-    /**
-     * Attach an interface to this link
-     * 
-     * @param interf The interface to attach
-     */
     public void attachInterface(Interface interf) {
         if (this.interfacesConnected >= PointToPointLink.NB_INTERFACES) {
             throw new IllegalStateException("Too many interfaces connected to this link");
@@ -85,6 +89,10 @@ public class PointToPointLink extends Link implements Schedulable {
      */
     @Override
     public void startTx(Packet packet, Interface src) {
+        if (this.interfacesConnected != 2) {
+            throw new IllegalStateException("Point to point link does not have both itnterfaces connected");
+        }
+
         int direction = this.directions[0].src == src ? 0 : 1;
 
         Time transmissionDelay = this.getTransmissionDelay(packet);
@@ -94,9 +102,9 @@ public class PointToPointLink extends Link implements Schedulable {
         }
         this.directions[direction].isTransmitting = true;
 
-        Simulator.getInstance().schedule(transmissionDelay, this, SchedulableMethod.POINT_TO_POINT_LINK__END_TX,
+        Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(transmissionDelay), this, SchedulableMethod.POINT_TO_POINT_LINK__END_TX,
                 packet, direction);
-        Simulator.getInstance().schedule(this.delay, this, SchedulableMethod.POINT_TO_POINT_LINK__START_RX,
+        Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(this.delay), this, SchedulableMethod.POINT_TO_POINT_LINK__START_RX,
                 packet, direction);
     }
 
@@ -122,8 +130,8 @@ public class PointToPointLink extends Link implements Schedulable {
 
         Time transmissionDelay = this.getTransmissionDelay(packet);
 
-        Simulator.getInstance().schedule(transmissionDelay, this, SchedulableMethod.POINT_TO_POINT_LINK__END_TX,
-                packet, direction);
+        Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(transmissionDelay), this,
+                SchedulableMethod.POINT_TO_POINT_LINK__END_TX, packet, direction);
     }
 
     /**
@@ -133,6 +141,7 @@ public class PointToPointLink extends Link implements Schedulable {
      * @param direction The direction of the link used
      */
     public void endRx(Packet packet, int direction) {
+        System.out.println("endRx " + Simulator.getInstance().getCurrentTime());
         this.directions[direction].dst.endRx(packet);
     }
 

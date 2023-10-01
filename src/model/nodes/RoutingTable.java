@@ -37,6 +37,7 @@ public class RoutingTable {
      * @param nextHop Next hop IP address
      */
     public void addEntry(IpAddress network, Interface inter, IpAddress nextHop) {
+        // TODO test conflicts
         if (this.table.containsKey(network)) {
             throw new IllegalArgumentException("Network " + network + "is already in routing table");
         }
@@ -52,6 +53,7 @@ public class RoutingTable {
      * @param nextHop Next hop IP address
      */
     public void updateEntry(IpAddress network, Interface inter, IpAddress nextHop) {
+        // TODO test conflicts
         if (!this.table.containsKey(network)) {
             throw new IllegalArgumentException("Network " + network + "is not in routing table");
         }
@@ -65,7 +67,17 @@ public class RoutingTable {
      * @return The pair Interface/nextHop, or null if no such key
      */
     public Pair<Interface, IpAddress> getEntry(IpAddress network) {
-        return this.table.get(network);
+        IpAddress candidate = null;
+        int bestMask = 0;
+        for (IpAddress key : this.table.keySet()) {
+            if (network.isInNetwork(key)) {
+                if (key.getMask() > bestMask) {
+                    candidate = key;
+                    bestMask = key.getMask();
+                }
+            }
+        }
+        return this.table.get(candidate);
     }
 
     /**

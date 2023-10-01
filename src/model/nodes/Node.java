@@ -3,6 +3,7 @@ package model.nodes;
 import java.util.ArrayList;
 
 import model.network.Packet;
+import model.simulator.Schedulable;
 
 /**
  * Abstract class representing a node
@@ -11,7 +12,7 @@ import model.network.Packet;
  * @version 1.0
  * @see Interface
  */
-public abstract class Node {
+public abstract class Node implements Schedulable{
 
     /**
      * Name of the node
@@ -58,6 +59,15 @@ public abstract class Node {
      * @param packet The packet received
      */
     public abstract void receive(Packet packet);
+
+    /**
+     * Add a new interface to this node
+     * 
+     * @param interf The interface to add
+     */
+    public void addInterface(Interface interf) {
+        this.interfaces.add(interf);
+    }
 
     /**
      * Get node name
