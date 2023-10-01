@@ -24,6 +24,11 @@ public abstract class Node {
     protected ArrayList<Interface> interfaces;
 
     /**
+     * ARP table of this node
+     */
+    protected ArpTable arpTable;
+
+    /**
      * Node contructor
      * 
      * @param name Name of this node
@@ -31,6 +36,7 @@ public abstract class Node {
     public Node(String name) {
         this.name = name;
         this.interfaces = new ArrayList<Interface>();
+        this.arpTable = new ArpTable();
     }
 
     /**

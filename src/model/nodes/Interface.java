@@ -105,6 +105,14 @@ public class Interface {
     }
 
     /**
+     * Receive a new packet from link
+     * @param packet The packet received
+     */
+    public void receive(Packet packet) {
+        this.node.receive(packet);
+    }
+
+    /**
      * Start transmission of a packet
      * 
      * @param packet The packet to send
@@ -152,7 +160,7 @@ public class Interface {
     public void endRx(Packet packet) {
         this.isReceiving = false;
 
-        this.node.receive(packet);
+        this.receive(packet);
     }
 
     /**

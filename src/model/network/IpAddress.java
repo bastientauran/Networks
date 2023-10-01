@@ -1,5 +1,7 @@
 package model.network;
 
+import java.util.Objects;
+
 /**
  * This class represents an IP address
  * 
@@ -152,7 +154,17 @@ public class IpAddress {
     }
 
     /**
+     * Get mask of this address
+     * 
+     * @return The IP address mask
+     */
+    public int getMask() {
+        return this.mask;
+    }
+
+    /**
      * Test if current IP address is in given IP network
+     * 
      * @param network The IP network
      * @return True if the address is in this network
      */
@@ -181,12 +193,18 @@ public class IpAddress {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(address, mask);
+    }
+
+    @Override
     public String toString() {
         return toStringNoMask() + "/" + String.valueOf(this.mask);
     }
 
     /**
      * Get String representation of this IP address, without mask
+     * 
      * @return The String generated
      */
     public String toStringNoMask() {
