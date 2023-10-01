@@ -193,7 +193,8 @@ for f in getPaths():
             a = Attribute()
             a.name = lineParsed.split()[-1]
             if "final" in parseAdditional(lineParsed):
-                a.name += " = " + line.replace(';','').split('=')[1].strip()
+                if '=' in line:
+                    a.name += " = " + line.replace(';','').split('=')[1].strip()
             a.visibility = parseVisibility(lineParsed)
             a.attributeType = lineParsed.split()[-2]
             a.additional = parseAdditional(lineParsed)
@@ -217,7 +218,10 @@ writeLine("@startUml")
 
 for c in classes:
     if c.classType == ClassType.ENUM:
-        writeLine(c.classType.value + " " + c.name + "{")
+        name = c.name
+        if '<' in c.name:
+            name = c.name.split('<')[0].strip()
+        writeLine(c.classType.value + " " + name + "{")
         for e in c.enumTypes:
             writeLine(e)
         writeLine('}')
@@ -227,25 +231,30 @@ for c in classes:
             ext = "abstract "
         writeLine(ext + c.classType.value + " " + c.name)
     for a in c.attributes:
+        name = c.name
+        if '<' in c.name:
+            name = c.name.split('<')[0].strip()
         for c2 in classesNames:
             if c2 in a.attributeType and a.attributeType != c.name:
                 t = a.attributeType
                 nb = '1'
                 if '<' in t:
-                    t = t.split('<')[1].split('>')[0].split(',')[0].strip()
+                    t = t.split('<')[1].split('>')[0].split(',')[-1].strip()
                     nb = "0..*"
                 if "static" in a.additional:
-                    writeLine(c.name + " --> \"__" + nb + " " + a.visibility.value + a.name + "__\" " + t)
+                    writeLine(name + " --> \"__" + nb + " " + a.visibility.value + a.name + "__\" " + t)
                 else:
-                    writeLine(c.name + " --> \"" + nb + " " + a.visibility.value + a.name + "\" " + t)
+                    writeLine(name + " --> \"" + nb + " " + a.visibility.value + a.name + "\" " + t)
                 break
         else:
             ext = ""
             if "static" in a.additional:
                 ext = "{static} "
-            writeLine(c.name + " : " + ext + a.visibility.value + " " + a.attributeType + " " + a.name)
+            writeLine(name + " : " + ext + a.visibility.value + " " + a.attributeType + " " + a.name)
     for m in c.methods:
         s = c.name
+        if '<' in c.name:
+            s = c.name.split('<')[0].strip()
         s += " : " + m.visibility.value
         if "abstract" in m.additional:
             s += "{abstract} "
