@@ -46,7 +46,7 @@ public class ArpTable {
     }
 
     /**
-     * Add a new entry in the ARP table.
+     * Update entry in the ARP table.
      * Raise an exception if IP address is not in the map
      * 
      * @param ipAddress  The IP address
@@ -63,7 +63,7 @@ public class ArpTable {
     }
 
     /**
-     * Get the MAC address corresponding to the IP address.
+     * Get the MAC address corresponding to the IP address
      * 
      * @param ipAddress The IP address
      * @return The associated MAC address, or null if no such key
