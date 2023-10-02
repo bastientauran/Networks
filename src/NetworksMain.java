@@ -35,13 +35,18 @@ public class NetworksMain {
         nodeSrc.getArpTable().addEntry(new IpAddress("192.168.0.2"), interfaceDst.getMacAddress());
         nodeDst.getArpTable().addEntry(new IpAddress("192.168.0.1"), interfaceSrc.getMacAddress());
 
-        Packet packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
-        IpHeader ipHeader = new IpHeader(new IpAddress("192.168.0.1"), new IpAddress("192.168.0.2"));
-        packet.addHeader(ipHeader);
-
         Simulator.getInstance().reset();
         Simulator.getInstance().setStopTime(new Time(1000, 0));
-        Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet);
+
+        Packet packet;
+        IpHeader ipHeader;
+        for (int i = 0; i < 5; i++) {
+            packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
+            ipHeader = new IpHeader(new IpAddress("192.168.0.1"), new IpAddress("192.168.0.2"));
+            packet.addHeader(ipHeader);
+            Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet);
+        }
+
         Simulator.getInstance().run();
 
         System.out.println(Simulator.getInstance().getCurrentTime());

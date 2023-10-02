@@ -34,12 +34,18 @@ public class Simulator {
     private TreeSet<Event> events;
 
     /**
+     * Unique ID given to events to differenciate ones one same date.
+     */
+    private long id;
+
+    /**
      * Private constructor
      */
     private Simulator() {
         this.currentTime = new Time();
         this.stopTime = new Time();
         this.events = new TreeSet<Event>();
+        this.id = 0;
     }
 
     /**
@@ -94,8 +100,9 @@ public class Simulator {
             throw new IllegalArgumentException("Cannot schedule in the past");
         }
         if (checkArguments(method, arguments)) {
-            Event e = new Event(time, instance, method, arguments);
+            Event e = new Event(time, instance, method, arguments, id);
             this.events.add(e);
+            id++;
         }
     }
 

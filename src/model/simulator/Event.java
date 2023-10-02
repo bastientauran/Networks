@@ -42,13 +42,15 @@ public class Event implements Comparable<Event> {
      * @param instance  The instance to launch
      * @param method    The method of instance to launch
      * @param arguments The arguments of the method
+     * @param id        Id of this event. Used to differenciate two events on same
+     *                  date
      */
-    public Event(Time time, Schedulable instance, SchedulableMethod method, Object[] arguments) {
+    public Event(Time time, Schedulable instance, SchedulableMethod method, Object[] arguments, long id) {
         this.time = time;
         this.instance = instance;
         this.method = method;
         this.arguments = arguments;
-        this.id = Singleton.getInstance().getId();
+        this.id = id;
     }
 
     /**
@@ -69,7 +71,7 @@ public class Event implements Comparable<Event> {
 
     @Override
     public int compareTo(Event other) {
-        if (this.time == other.time) {
+        if (this.time.equals(other.time)) {
             if (this.id > other.id) {
                 return 1;
             } else if (this.id < other.id) {

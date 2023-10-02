@@ -102,10 +102,15 @@ public class PointToPointLink extends Link implements Schedulable {
         }
         this.directions[direction].isTransmitting = true;
 
-        Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(transmissionDelay), this, SchedulableMethod.POINT_TO_POINT_LINK__END_TX,
+        Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(transmissionDelay), this,
+                SchedulableMethod.POINT_TO_POINT_LINK__END_TX,
                 packet, direction);
-        Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(this.delay), this, SchedulableMethod.POINT_TO_POINT_LINK__START_RX,
+        Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(this.delay), this,
+                SchedulableMethod.POINT_TO_POINT_LINK__START_RX,
                 packet, direction);
+        Simulator.getInstance().schedule(
+                Simulator.getInstance().getCurrentTime().add(transmissionDelay).add(this.delay), this,
+                SchedulableMethod.POINT_TO_POINT_LINK__END_RX, packet, direction);
     }
 
     /**
@@ -127,11 +132,6 @@ public class PointToPointLink extends Link implements Schedulable {
      */
     public void startRx(Packet packet, int direction) {
         this.directions[direction].dst.startRx(packet);
-
-        Time transmissionDelay = this.getTransmissionDelay(packet);
-
-        Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(transmissionDelay), this,
-                SchedulableMethod.POINT_TO_POINT_LINK__END_TX, packet, direction);
     }
 
     /**
@@ -141,7 +141,6 @@ public class PointToPointLink extends Link implements Schedulable {
      * @param direction The direction of the link used
      */
     public void endRx(Packet packet, int direction) {
-        System.out.println("endRx " + Simulator.getInstance().getCurrentTime());
         this.directions[direction].dst.endRx(packet);
     }
 
@@ -193,7 +192,7 @@ public class PointToPointLink extends Link implements Schedulable {
         double timeSeconds = 1.0 * packetTotalSize / this.bandwidthBytesPerSecond;
 
         int seconds = (int) timeSeconds;
-        int nanoSeconds = (int) (1000000 * (timeSeconds - seconds));
+        int nanoSeconds = (int) (1000000000 * (timeSeconds - seconds));
 
         return new Time(seconds, nanoSeconds);
     }
