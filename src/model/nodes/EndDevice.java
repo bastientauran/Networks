@@ -41,7 +41,7 @@ public class EndDevice extends Node {
     public void run(SchedulableMethod method, Object[] arguments) {
         switch (method) {
             case END_DEVICE_SEND: {
-                send((Packet) arguments[0]);
+                this.send((Packet) arguments[0]);
                 break;
             }
             default: {

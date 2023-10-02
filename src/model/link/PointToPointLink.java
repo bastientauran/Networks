@@ -201,15 +201,15 @@ public class PointToPointLink extends Link implements Schedulable {
     public void run(SchedulableMethod method, Object[] arguments) {
         switch (method) {
             case POINT_TO_POINT_LINK__END_TX: {
-                endTx((Packet) arguments[0], (int) arguments[1]);
+                this.endTx((Packet) arguments[0], (int) arguments[1]);
                 break;
             }
             case POINT_TO_POINT_LINK__START_RX: {
-                startRx((Packet) arguments[0], (int) arguments[1]);
+                this.startRx((Packet) arguments[0], (int) arguments[1]);
                 break;
             }
             case POINT_TO_POINT_LINK__END_RX: {
-                endRx((Packet) arguments[0], (int) arguments[1]);
+                this.endRx((Packet) arguments[0], (int) arguments[1]);
                 break;
             }
             default: {

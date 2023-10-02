@@ -44,11 +44,11 @@ public class SimulatorTest {
         public void run(SchedulableMethod method, Object[] arguments) {
             switch (method) {
                 case DUMMY_CLASS__METHOD_1: {
-                    method1((int) arguments[0]);
+                    this.method1((int) arguments[0]);
                     break;
                 }
                 case DUMMY_CLASS__METHOD_2: {
-                    method2((String) arguments[0], (Time) arguments[1]);
+                    this.method2((String) arguments[0], (Time) arguments[1]);
                     break;
                 }
                 default: {
