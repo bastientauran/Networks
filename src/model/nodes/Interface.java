@@ -3,6 +3,8 @@ package model.nodes;
 import java.util.LinkedList;
 
 import model.link.Link;
+import model.network.Header;
+import model.network.HeaderType;
 import model.network.IpAddress;
 import model.network.MacAddress;
 import model.network.MacAddressContainer;
@@ -100,6 +102,13 @@ public class Interface {
             return false;
         }
 
+        Header currentHeader = packet.peekHeader();
+        if (currentHeader != null) {
+            if (currentHeader.getType() == HeaderType.MAC_HEADER) {
+                throw new IllegalStateException("Packet cannot already have MAC header");
+            }
+        }
+
         MacHeader macHeader = new MacHeader(this.macAddress, dstMacAddress);
         packet.addHeader(macHeader);
 
@@ -180,6 +189,15 @@ public class Interface {
         this.isReceiving = false;
 
         this.receive(packet);
+    }
+
+    /**
+     * Get the IP address of the interface
+     * 
+     * @return The IP address
+     */
+    public IpAddress getIpAddress() {
+        return this.ipAddress;
     }
 
     /**

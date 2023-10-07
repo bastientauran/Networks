@@ -23,22 +23,26 @@ public class MacHeader extends Header {
      * Default constructor
      */
     public MacHeader() {
+        super(HeaderType.MAC_HEADER);
         this.source = new MacAddress();
         this.destination = new MacAddress();
     }
 
     /**
      * Constructor of MAC header
-     * @param source Source MAC address
+     * 
+     * @param source      Source MAC address
      * @param destination Destination MAC address
      */
     public MacHeader(MacAddress source, MacAddress destination) {
+        super(HeaderType.MAC_HEADER);
         this.source = new MacAddress(source);
         this.destination = new MacAddress(destination);
     }
 
     /**
      * Get source MAC address
+     * 
      * @return Source MAC address
      */
     public MacAddress getSource() {
@@ -47,6 +51,7 @@ public class MacHeader extends Header {
 
     /**
      * Get destination MAC address
+     * 
      * @return Destination MAC address
      */
     public MacAddress getDestination() {
@@ -55,7 +60,7 @@ public class MacHeader extends Header {
 
     @Override
     public int getSize() {
-        return 2*MacAddress.SIZE_BYTES;
+        return 2 * MacAddress.SIZE_BYTES;
     }
 
     @Override

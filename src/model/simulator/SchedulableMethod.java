@@ -1,5 +1,6 @@
 package model.simulator;
 
+import model.network.IpAddress;
 import model.network.Packet;
 
 /**
@@ -16,7 +17,7 @@ public enum SchedulableMethod {
     POINT_TO_POINT_LINK__END_TX("PointToPointLink", "endTx", new Class<?>[] { Packet.class, Integer.class }),
     POINT_TO_POINT_LINK__START_RX("PointToPointLink", "startRx", new Class<?>[] { Packet.class, Integer.class }),
     POINT_TO_POINT_LINK__END_RX("PointToPointLink", "endRx", new Class<?>[] { Packet.class, Integer.class }),
-    END_DEVICE_SEND("EndDevice", "send", new Class<?>[] { Packet.class });
+    END_DEVICE_SEND("EndDevice", "send", new Class<?>[] { Packet.class, IpAddress.class });
 
     private String className;
     private String methodName;

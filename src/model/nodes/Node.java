@@ -2,6 +2,7 @@ package model.nodes;
 
 import java.util.ArrayList;
 
+import model.network.IpAddress;
 import model.network.Packet;
 import model.simulator.Schedulable;
 
@@ -12,7 +13,7 @@ import model.simulator.Schedulable;
  * @version 1.0
  * @see Interface
  */
-public abstract class Node implements Schedulable{
+public abstract class Node implements Schedulable {
 
     /**
      * Name of the node
@@ -47,11 +48,13 @@ public abstract class Node implements Schedulable{
     }
 
     /**
-     * Send a new packet
+     * Send a new packet.
+     * This method adds an IP header
      * 
-     * @param packet The packet to send
+     * @param packet      The packet to send
+     * @param destination destination IP address of this packet
      */
-    public abstract void send(Packet packet);
+    public abstract void send(Packet packet, IpAddress destination);
 
     /**
      * Receive a new Packet from an interface
@@ -59,6 +62,14 @@ public abstract class Node implements Schedulable{
      * @param packet The packet received
      */
     public abstract void receive(Packet packet);
+
+    /**
+     * Forward a new Packet to the next interface.
+     * This method does not add an IP header
+     * 
+     * @param packet The packet to forward
+     */
+    public abstract void forward(Packet packet);
 
     /**
      * Add a new interface to this node
