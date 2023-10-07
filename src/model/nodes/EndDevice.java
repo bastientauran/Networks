@@ -5,6 +5,7 @@ import model.network.HeaderType;
 import model.network.IpAddress;
 import model.network.IpHeader;
 import model.network.Packet;
+import model.simulator.Schedulable;
 import model.simulator.SchedulableMethod;
 import model.utils.Pair;
 
@@ -15,7 +16,7 @@ import model.utils.Pair;
  * @version 1.0
  * @see Node
  */
-public class EndDevice extends Node {
+public class EndDevice extends Node implements Schedulable {
 
     /**
      * End Device constructor

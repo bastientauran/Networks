@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import model.network.IpAddress;
 import model.network.Packet;
-import model.simulator.Schedulable;
 
 /**
  * Abstract class representing a node
@@ -13,7 +12,7 @@ import model.simulator.Schedulable;
  * @version 1.0
  * @see Interface
  */
-public abstract class Node implements Schedulable {
+public abstract class Node {
 
     /**
      * Name of the node

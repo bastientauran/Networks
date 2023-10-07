@@ -85,6 +85,9 @@ public class Simulator {
      * @param stopTime Time where the simulation will be stopped
      */
     public void setStopTime(Time stopTime) {
+        if (stopTime.compareTo(new Time()) == 0) {
+            throw new IllegalStateException("Stop time must be strictly positive");
+        }
         this.stopTime = stopTime;
     }
 
@@ -127,6 +130,9 @@ public class Simulator {
      * It runs while events are scheduled and stop simulation time is not reached
      */
     public void run() {
+        if (this.stopTime.compareTo(new Time()) == 0) {
+            throw new IllegalStateException("Stop time not set");
+        }
         this.running = true;
         for (Event e : this.events) {
             if (e.getTime().compareTo(this.stopTime) > 0) {
@@ -137,9 +143,6 @@ public class Simulator {
         while (!this.events.isEmpty()) {
             Event e = this.events.pollFirst();
             this.currentTime = e.getTime();
-            if (this.currentTime.compareTo(this.stopTime) > 0) {
-                break;
-            }
             e.runEvent();
         }
         this.running = false;
