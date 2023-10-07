@@ -29,6 +29,11 @@ public class Simulator {
     private Time stopTime;
 
     /**
+     * Indicates if the simulation has been launched
+     */
+    private boolean running;
+
+    /**
      * The list of events to schedule
      */
     private TreeSet<Event> events;
@@ -44,6 +49,7 @@ public class Simulator {
     private Simulator() {
         this.currentTime = new Time();
         this.stopTime = new Time();
+        this.running = false;
         this.events = new TreeSet<Event>();
         this.id = 0;
     }
@@ -64,9 +70,13 @@ public class Simulator {
      * Reset the simulation
      */
     public void reset() {
+        if (this.running == true) {
+            throw new IllegalStateException("Cannot reset simulation when running");
+        }
         this.currentTime = new Time();
         this.stopTime = new Time();
         this.events = new TreeSet<Event>();
+        this.id = 0;
     }
 
     /**
@@ -100,6 +110,12 @@ public class Simulator {
             throw new IllegalArgumentException("Cannot schedule in the past");
         }
         if (checkArguments(method, arguments)) {
+            if (this.running == true) {
+                if (time.compareTo(this.stopTime) > 0) {
+                    System.out.println("Trying to schedule event after stop simulation time");
+                    return;
+                }
+            }
             Event e = new Event(time, instance, method, arguments, id);
             this.events.add(e);
             id++;
@@ -111,6 +127,13 @@ public class Simulator {
      * It runs while events are scheduled and stop simulation time is not reached
      */
     public void run() {
+        this.running = true;
+        for (Event e : this.events) {
+            if (e.getTime().compareTo(this.stopTime) > 0) {
+                this.events.tailSet(e).clear();
+                break;
+            }
+        }
         while (!this.events.isEmpty()) {
             Event e = this.events.pollFirst();
             this.currentTime = e.getTime();
@@ -119,6 +142,7 @@ public class Simulator {
             }
             e.runEvent();
         }
+        this.running = false;
     }
 
     /**
