@@ -46,7 +46,7 @@ public class PointToPointLinkTest {
 
         Packet packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
 
-        Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet, new IpAddress("192.168.0.2"));
+        Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.2"));
         Simulator.getInstance().run();
 
         assertEquals(Simulator.getInstance().getCurrentTime(), new Time(51, 0));
@@ -82,7 +82,7 @@ public class PointToPointLinkTest {
         Packet packet;
         for (int i = 0; i < 5; i++) {
             packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
-            Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet, new IpAddress("192.168.0.2"));
+            Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.2"));
         }
 
         Simulator.getInstance().run();
@@ -120,10 +120,10 @@ public class PointToPointLinkTest {
         Packet packet;
         for (int i = 0; i < 5; i++) {
             packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
-            Simulator.getInstance().schedule(new Time(10, 1000), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet, new IpAddress("192.168.0.2"));
+            Simulator.getInstance().schedule(new Time(10, 1000), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.2"));
         }
         packet = new Packet(500 - new MacHeader().getSize() - new IpHeader().getSize());
-        Simulator.getInstance().schedule(new Time(10, 1000), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet, new IpAddress("192.168.0.2"));
+        Simulator.getInstance().schedule(new Time(10, 1000), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.2"));
 
         Simulator.getInstance().run();
 
@@ -158,10 +158,10 @@ public class PointToPointLinkTest {
         Simulator.getInstance().setStopTime(new Time(1000, 0));
 
         Packet packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
-        Simulator.getInstance().schedule(new Time(0, 0), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet, new IpAddress("192.168.0.2"));
+        Simulator.getInstance().schedule(new Time(0, 0), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.2"));
 
         packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
-        Simulator.getInstance().schedule(new Time(0, 500000000), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet, new IpAddress("192.168.0.2"));
+        Simulator.getInstance().schedule(new Time(0, 500000000), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.2"));
 
         Simulator.getInstance().run();
 
@@ -200,7 +200,7 @@ public class PointToPointLinkTest {
         Packet packet;
         for (int i = 0; i < 20; i++) {
             packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
-            Simulator.getInstance().schedule(new Time(0, 0), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet, new IpAddress("192.168.0.2"));
+            Simulator.getInstance().schedule(new Time(0, 0), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.2"));
         }
 
         Simulator.getInstance().run();

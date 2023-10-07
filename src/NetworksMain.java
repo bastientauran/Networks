@@ -44,7 +44,7 @@ public class NetworksMain {
             packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
             ipHeader = new IpHeader(new IpAddress("192.168.0.1"), new IpAddress("192.168.0.2"));
             packet.addHeader(ipHeader);
-            Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE_SEND, packet);
+            Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet);
         }
 
         Simulator.getInstance().run();

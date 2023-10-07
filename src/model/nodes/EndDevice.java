@@ -94,7 +94,7 @@ public class EndDevice extends Node {
     @Override
     public void run(SchedulableMethod method, Object[] arguments) {
         switch (method) {
-            case END_DEVICE_SEND: {
+            case END_DEVICE__SEND: {
                 this.send((Packet) arguments[0], (IpAddress) arguments[1]);
                 break;
             }
