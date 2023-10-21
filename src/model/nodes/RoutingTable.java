@@ -37,11 +37,14 @@ public class RoutingTable {
      * @param nextHop Next hop IP address
      */
     public void addEntry(IpAddress network, Interface inter, IpAddress nextHop) {
-        // TODO test conflicts
-        if (this.table.containsKey(network)) {
-            throw new IllegalArgumentException("Network " + network + "is already in routing table");
+        if (nextHop.getMask() != 32) {
+            throw new IllegalArgumentException("Next hop address mask must be 32, but got " + nextHop.getMask());
         }
-        this.table.put(network, new Pair<Interface, IpAddress>(inter, nextHop));
+        IpAddress net = network.getNetwork();
+        if (this.table.containsKey(net)) {
+            throw new IllegalArgumentException("Network " + net + "is already in routing table");
+        }
+        this.table.put(net, new Pair<Interface, IpAddress>(inter, nextHop));
     }
 
     /**
@@ -53,11 +56,14 @@ public class RoutingTable {
      * @param nextHop Next hop IP address
      */
     public void updateEntry(IpAddress network, Interface inter, IpAddress nextHop) {
-        // TODO test conflicts
-        if (!this.table.containsKey(network)) {
-            throw new IllegalArgumentException("Network " + network + "is not in routing table");
+        if (nextHop.getMask() != 32) {
+            throw new IllegalArgumentException("Next hop address mask must be 32, but got " + nextHop.getMask());
         }
-        this.table.put(network, new Pair<Interface, IpAddress>(inter, nextHop));
+        IpAddress net = network.getNetwork();
+        if (!this.table.containsKey(net)) {
+            throw new IllegalArgumentException("Network " + net + "is not in routing table");
+        }
+        this.table.put(net, new Pair<Interface, IpAddress>(inter, nextHop));
     }
 
     /**
@@ -68,7 +74,7 @@ public class RoutingTable {
      */
     public Pair<Interface, IpAddress> getEntry(IpAddress network) {
         IpAddress candidate = null;
-        int bestMask = 0;
+        int bestMask = -1;
         for (IpAddress key : this.table.keySet()) {
             if (network.isInNetwork(key)) {
                 if (key.getMask() > bestMask) {
@@ -87,6 +93,11 @@ public class RoutingTable {
      * @return True if IP address is in table, False otherwise
      */
     public boolean hasEntry(IpAddress network) {
-        return this.table.containsKey(network);
+        for (IpAddress key : this.table.keySet()) {
+            if (network.isInNetwork(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

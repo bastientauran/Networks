@@ -213,7 +213,7 @@ public class IpAddress implements Comparable<IpAddress> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(address, mask);
+        return Objects.hash(this.address[0], this.address[1], this.address[2], this.address[3], this.mask);
     }
 
     @Override
