@@ -12,19 +12,19 @@ public class MacAddressTest {
    @Test
    public void testEmptyConstructor() {
       MacAddress address = new MacAddress();
-      assertEquals(address.toString(), "00:00:00:00:00:00");
+      assertEquals("00:00:00:00:00:00", address.toString());
    }
 
    @Test
    public void testConstructorWithArray() {
       MacAddress address = new MacAddress(new int[] { 0, 5, 6, 22, 7, 15 });
-      assertEquals(address.toString(), "00:05:06:16:07:0F");
+      assertEquals("00:05:06:16:07:0F", address.toString());
    }
 
    @Test
    public void testConstructorWithString() {
       MacAddress address = new MacAddress("AA:BB:1E:F6:00:19");
-      assertEquals(address.toString(), "AA:BB:1E:F6:00:19");
+      assertEquals("AA:BB:1E:F6:00:19", address.toString());
    }
 
    @Test
@@ -33,7 +33,7 @@ public class MacAddressTest {
       assertThrows(
             IllegalStateException.class,
             () -> new MacAddress("00:05:06:16:07:0E"));
-      assertEquals(address.toString(), "00:05:06:16:07:0E");
+      assertEquals("00:05:06:16:07:0E", address.toString());
    }
 
    @Test

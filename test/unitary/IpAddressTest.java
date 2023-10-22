@@ -14,25 +14,25 @@ public class IpAddressTest {
    @Test
    public void testEmptyConstructor() {
       IpAddress address = new IpAddress();
-      assertEquals(address.toString(), "0.0.0.0/32");
+      assertEquals("0.0.0.0/32", address.toString());
    }
 
    @Test
    public void testConstructorWithArray() {
       IpAddress address = new IpAddress(new int[] { 192, 168, 0, 1 }, 16);
-      assertEquals(address.toString(), "192.168.0.1/16");
+      assertEquals("192.168.0.1/16", address.toString());
    }
 
    @Test
    public void testConstructorWithString() {
       IpAddress address = new IpAddress("10.10.16.65/24");
-      assertEquals(address.toString(), "10.10.16.65/24");
+      assertEquals("10.10.16.65/24", address.toString());
    }
 
    @Test
    public void testConstructorCopyNewMask() {
       IpAddress address = new IpAddress("10.10.16.65/24");
-      assertEquals(new IpAddress(address, 30).toString(), "10.10.16.65/30");
+      assertEquals("10.10.16.65/30", new IpAddress(address, 30).toString());
    }
 
    @Test
@@ -45,37 +45,37 @@ public class IpAddressTest {
    @Test
    public void testToStringNoMask() {
       IpAddress address = new IpAddress("192.168.0.1/14");
-      assertEquals(address.toStringNoMask(), "192.168.0.1");
+      assertEquals("192.168.0.1", address.toStringNoMask());
 
       address = new IpAddress("192.168.100.192/14");
-      assertEquals(address.toStringNoMask(), "192.168.100.192");
+      assertEquals("192.168.100.192", address.toStringNoMask());
    }
 
    @Test
    public void testNetworks() {
       IpAddress address = new IpAddress("192.168.100.1/24");
-      assertEquals(address.getNetwork().toString(), "192.168.100.0/24");
+      assertEquals("192.168.100.0/24", address.getNetwork().toString());
 
       address = new IpAddress("192.168.100.1/16");
-      assertEquals(address.getNetwork().toString(), "192.168.0.0/16");
+      assertEquals("192.168.0.0/16", address.getNetwork().toString());
 
       address = new IpAddress("192.168.100.1/32");
-      assertEquals(address.getNetwork().toString(), "192.168.100.1/32");
+      assertEquals("192.168.100.1/32", address.getNetwork().toString());
 
       address = new IpAddress("192.168.100.1/0");
-      assertEquals(address.getNetwork().toString(), "0.0.0.0/0");
+      assertEquals("0.0.0.0/0", address.getNetwork().toString());
 
       address = new IpAddress("192.168.100.1/17");
-      assertEquals(address.getNetwork().toString(), "192.168.0.0/17");
+      assertEquals("192.168.0.0/17", address.getNetwork().toString());
 
       address = new IpAddress("192.168.100.1/18");
-      assertEquals(address.getNetwork().toString(), "192.168.64.0/18");
+      assertEquals("192.168.64.0/18", address.getNetwork().toString());
 
       address = new IpAddress("192.168.100.1/20");
-      assertEquals(address.getNetwork().toString(), "192.168.96.0/20");
+      assertEquals("192.168.96.0/20", address.getNetwork().toString());
 
       address = new IpAddress("192.168.100.1/23");
-      assertEquals(address.getNetwork().toString(), "192.168.100.0/23");
+      assertEquals("192.168.100.0/23", address.getNetwork().toString());
    }
 
    @Test

@@ -49,7 +49,7 @@ public class PointToPointLinkTest {
         Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.2"));
         Simulator.getInstance().run();
 
-        assertEquals(Simulator.getInstance().getCurrentTime(), new Time(51, 0));
+        assertEquals(new Time(51, 0), Simulator.getInstance().getCurrentTime());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class PointToPointLinkTest {
 
         Simulator.getInstance().run();
 
-        assertEquals(Simulator.getInstance().getCurrentTime(), new Time(55, 0));
+        assertEquals(new Time(55, 0), Simulator.getInstance().getCurrentTime());
     }
 
     @Test
@@ -127,7 +127,7 @@ public class PointToPointLinkTest {
 
         Simulator.getInstance().run();
 
-        assertEquals(Simulator.getInstance().getCurrentTime(), new Time(65, 1000 + 500000000));
+        assertEquals(new Time(65, 1000 + 500000000), Simulator.getInstance().getCurrentTime());
     }
 
     @Test
@@ -165,7 +165,7 @@ public class PointToPointLinkTest {
 
         Simulator.getInstance().run();
 
-        assertEquals(Simulator.getInstance().getCurrentTime(), new Time(52, 0));
+        assertEquals(new Time(52, 0), Simulator.getInstance().getCurrentTime());
     }
 
     @Test
@@ -205,6 +205,6 @@ public class PointToPointLinkTest {
 
         Simulator.getInstance().run();
 
-        assertEquals(Simulator.getInstance().getCurrentTime(), new Time(61, 0));
+        assertEquals(new Time(61, 0), Simulator.getInstance().getCurrentTime());
     }
 }

@@ -13,13 +13,13 @@ public class TimeTest {
     @Test
     public void testEmptyConstructor() {
         Time time = new Time();
-        assertEquals(time.toString(), "0s0ns");
+        assertEquals("0s0ns", time.toString());
     }
 
     @Test
     public void testCustomEmpty() {
         Time time = new Time(10, 50);
-        assertEquals(time.toString(), "10s50ns");
+        assertEquals("10s50ns", time.toString());
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Time(-1, 20));

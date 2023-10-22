@@ -67,8 +67,8 @@ public class SimulatorTest {
     @Test
     public void testinitialTime() {
         Simulator.getInstance().reset();
-        assertEquals(Simulator.getInstance().getCurrentTime(), new Time());
-        assertEquals(Simulator.getInstance().getCurrentTime().toString(), "0s0ns");
+        assertEquals(new Time(), Simulator.getInstance().getCurrentTime());
+        assertEquals("0s0ns", Simulator.getInstance().getCurrentTime().toString());
     }
 
     @Test

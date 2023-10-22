@@ -1,8 +1,11 @@
 package unitary;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -33,16 +36,16 @@ public class RoutingTest {
         IpAddress nextHop = new IpAddress("192.168.1.1/32");
 
         table.addEntry(ipAddress, i, nextHop);
-        assertEquals(table.hasEntry(ipAddress), true);
+        assertTrue(table.hasEntry(ipAddress));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> table.addEntry(ipAddress, i, nextHop));
-        assertEquals(table.hasEntry(ipAddress), true);
-        assertEquals(table.hasEntry(new IpAddress("192.168.100.0/24")), true);
-        assertEquals(table.hasEntry(new IpAddress("192.168.100.1/32")), true);
-        assertNotEquals(table.getEntry(new IpAddress("192.168.100.0/24")), null);
-        assertNotEquals(table.getEntry(new IpAddress("192.168.100.1/32")), null);
-        assertEquals(table.getEntry(new IpAddress("192.168.101.1/32")), null);
+        assertTrue(table.hasEntry(ipAddress));
+        assertTrue(table.hasEntry(new IpAddress("192.168.100.0/24")));
+        assertTrue(table.hasEntry(new IpAddress("192.168.100.1/32")));
+        assertNotNull(table.getEntry(new IpAddress("192.168.100.0/24")));
+        assertNotNull(table.getEntry(new IpAddress("192.168.100.1/32")));
+        assertNull(table.getEntry(new IpAddress("192.168.101.1/32")));
     }
 
     @Test
@@ -57,12 +60,12 @@ public class RoutingTest {
                 IllegalArgumentException.class,
                 () -> table.updateEntry(ipAddress, i, nextHop));
 
-        assertEquals(table.hasEntry(ipAddress), false);
+        assertFalse(table.hasEntry(ipAddress));
         table.addEntry(ipAddress, i, nextHop);
-        assertEquals(table.hasEntry(ipAddress), true);
+        assertTrue(table.hasEntry(ipAddress));
         table.updateEntry(ipAddress, i, nextHop2);
-        assertEquals(table.hasEntry(ipAddress), true);
-        assertNotEquals(table.getEntry(ipAddress), null);
+        assertTrue(table.hasEntry(ipAddress));
+        assertNotNull(table.getEntry(ipAddress));
     }
 
     @Test
@@ -79,32 +82,32 @@ public class RoutingTest {
         IpAddress ipAddressDefault = new IpAddress("0.0.0.0/0");
         IpAddress nextHopDefault = new IpAddress("192.168.3.1/32");
 
-        assertEquals(table.hasEntry(ipAddress), false);
-        assertEquals(table.hasEntry(ipAddress2), false);
-        assertEquals(table.hasEntry(ipAddressDefault), false);
+        assertFalse(table.hasEntry(ipAddress));
+        assertFalse(table.hasEntry(ipAddress2));
+        assertFalse(table.hasEntry(ipAddressDefault));
         table.addEntry(ipAddress, i, nextHop);
         table.addEntry(ipAddressDefault, i, nextHopDefault);
         table.addEntry(ipAddress2, i, nextHop2);
-        assertEquals(table.hasEntry(ipAddress), true);
-        assertEquals(table.hasEntry(ipAddress2), true);
-        assertEquals(table.hasEntry(ipAddressDefault), true);
+        assertTrue(table.hasEntry(ipAddress));
+        assertTrue(table.hasEntry(ipAddress2));
+        assertTrue(table.hasEntry(ipAddressDefault));
 
-        assertEquals(table.getEntry(new IpAddress("192.168.100.1")).second, nextHop);
-        assertEquals(table.getEntry(new IpAddress("192.168.0.1")).second, nextHop2);
-        assertEquals(table.getEntry(new IpAddress("10.10.0.1")).second, nextHopDefault);
+        assertEquals(nextHop, table.getEntry(new IpAddress("192.168.100.1")).second);
+        assertEquals(nextHop2, table.getEntry(new IpAddress("192.168.0.1")).second);
+        assertEquals(nextHopDefault, table.getEntry(new IpAddress("10.10.0.1")).second);
 
         table.deleteEntry(ipAddress2);
-        assertEquals(table.hasEntry(ipAddress), true);
-        assertEquals(table.hasEntry(ipAddress2), true);
-        assertEquals(table.hasEntry(ipAddressDefault), true);
+        assertTrue(table.hasEntry(ipAddress));
+        assertTrue(table.hasEntry(ipAddress2));
+        assertTrue(table.hasEntry(ipAddressDefault));
 
-        assertEquals(table.getEntry(new IpAddress("192.168.100.1")).second, nextHop);
-        assertEquals(table.getEntry(new IpAddress("192.168.0.1")).second, nextHopDefault);
-        assertEquals(table.getEntry(new IpAddress("10.10.0.1")).second, nextHopDefault);
+        assertEquals(nextHop, table.getEntry(new IpAddress("192.168.100.1")).second);
+        assertEquals(nextHopDefault, table.getEntry(new IpAddress("192.168.0.1")).second);
+        assertEquals(nextHopDefault, table.getEntry(new IpAddress("10.10.0.1")).second);
 
         table.flush();
-        assertEquals(table.hasEntry(ipAddress), false);
-        assertEquals(table.hasEntry(ipAddress2), false);
-        assertEquals(table.hasEntry(ipAddressDefault), false);
+        assertFalse(table.hasEntry(ipAddress));
+        assertFalse(table.hasEntry(ipAddress2));
+        assertFalse(table.hasEntry(ipAddressDefault));
     }
 }
