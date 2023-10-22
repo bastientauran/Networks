@@ -3,7 +3,7 @@ package model.nodes;
 import java.util.HashMap;
 
 import model.network.IpAddress;
-import model.utils.Pair;
+import utils.Pair;
 
 /**
  * Class representing a routing table.

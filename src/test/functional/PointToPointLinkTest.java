@@ -1,4 +1,4 @@
-package functional;
+package test.functional;
 
 import static org.junit.Assert.assertEquals;
 

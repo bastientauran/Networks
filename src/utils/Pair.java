@@ -1,4 +1,4 @@
-package model.utils;
+package utils;
 
 /**
  * Class used to store a pair of values.
