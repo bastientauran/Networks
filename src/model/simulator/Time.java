@@ -86,7 +86,7 @@ public class Time implements Comparable<Time> {
      * Remove argument time from the current time.
      * It does not modify current reference, nor the argument
      * 
-     * @param other The time to remove to current time
+     * @param toRemove The time to remove to current time
      * @return The time being the difference between current and argument
      */
     public Time remove(Time toRemove) {
