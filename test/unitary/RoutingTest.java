@@ -92,5 +92,19 @@ public class RoutingTest {
         assertEquals(table.getEntry(new IpAddress("192.168.100.1")).second, nextHop);
         assertEquals(table.getEntry(new IpAddress("192.168.0.1")).second, nextHop2);
         assertEquals(table.getEntry(new IpAddress("10.10.0.1")).second, nextHopDefault);
+
+        table.deleteEntry(ipAddress2);
+        assertEquals(table.hasEntry(ipAddress), true);
+        assertEquals(table.hasEntry(ipAddress2), true);
+        assertEquals(table.hasEntry(ipAddressDefault), true);
+
+        assertEquals(table.getEntry(new IpAddress("192.168.100.1")).second, nextHop);
+        assertEquals(table.getEntry(new IpAddress("192.168.0.1")).second, nextHopDefault);
+        assertEquals(table.getEntry(new IpAddress("10.10.0.1")).second, nextHopDefault);
+
+        table.flush();
+        assertEquals(table.hasEntry(ipAddress), false);
+        assertEquals(table.hasEntry(ipAddress2), false);
+        assertEquals(table.hasEntry(ipAddressDefault), false);
     }
 }

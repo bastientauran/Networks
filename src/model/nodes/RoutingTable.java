@@ -67,6 +67,26 @@ public class RoutingTable {
     }
 
     /**
+     * Remove an entry from the table. It must be in the table.
+     * 
+     * @param network The IP destination to remove
+     */
+    public void deleteEntry(IpAddress network) {
+        IpAddress net = network.getNetwork();
+        if (!this.table.containsKey(net)) {
+            throw new IllegalArgumentException("Network " + net + "is not in routing table");
+        }
+        this.table.remove(net);
+    }
+
+    /**
+     * Remove all the entries from the table
+     */
+    public void flush() {
+        this.table.clear();
+    }
+
+    /**
      * Get the pair [Interface, nextHop] corresponding to the network
      * 
      * @param network The destination network

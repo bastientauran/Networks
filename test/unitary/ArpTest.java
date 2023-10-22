@@ -61,4 +61,38 @@ public class ArpTest {
         assertEquals(table.getEntry(ipAddress), macAddress2);
     }
 
+    @Test
+    public void testSeveralEntries() {
+        ArpTable table = new ArpTable();
+        IpAddress ipAddress = new IpAddress("192.168.100.2/32");
+        IpAddress ipAddress2 = new IpAddress("192.168.101.2/32");
+        MacAddress macAddress = new MacAddress("11:22:33:44:55:75");
+        MacAddress macAddress2 = new MacAddress("11:22:33:44:55:76");
+
+        table.addEntry(ipAddress, macAddress);
+        table.addEntry(ipAddress2, macAddress2);
+        assertEquals(table.hasEntry(ipAddress), true);
+        assertEquals(table.hasEntry(ipAddress2), true);
+        assertEquals(table.getEntry(ipAddress), macAddress);
+        assertEquals(table.getEntry(ipAddress2), macAddress2);
+
+        table.deleteEntry(ipAddress);
+        assertEquals(table.hasEntry(ipAddress), false);
+        assertEquals(table.hasEntry(ipAddress2), true);
+        assertEquals(table.getEntry(ipAddress), null);
+        assertEquals(table.getEntry(ipAddress2), macAddress2);
+
+        table.addEntry(ipAddress, macAddress);
+        assertEquals(table.hasEntry(ipAddress), true);
+        assertEquals(table.hasEntry(ipAddress2), true);
+        assertEquals(table.getEntry(ipAddress), macAddress);
+        assertEquals(table.getEntry(ipAddress2), macAddress2);
+
+        table.flush();
+        assertEquals(table.hasEntry(ipAddress), false);
+        assertEquals(table.hasEntry(ipAddress2), false);
+        assertEquals(table.getEntry(ipAddress), null);
+        assertEquals(table.getEntry(ipAddress2), null);
+    }
+
 }

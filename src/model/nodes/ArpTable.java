@@ -63,6 +63,28 @@ public class ArpTable {
     }
 
     /**
+     * Remove an entry from the table. It must be in the table.
+     * 
+     * @param ipAddress The IP destination to remove
+     */
+    public void deleteEntry(IpAddress ipAddress) {
+        if (ipAddress.getMask() != 32) {
+            throw new IllegalArgumentException("IP address mask must be 32, but got " + ipAddress.getMask());
+        }
+        if (!this.table.containsKey(ipAddress)) {
+            throw new IllegalArgumentException("IP adress " + ipAddress + "is not in ARP table");
+        }
+        this.table.remove(ipAddress);
+    }
+
+    /**
+     * Remove all the entries from the table
+     */
+    public void flush() {
+        this.table.clear();
+    }
+
+    /**
      * Get the MAC address corresponding to the IP address
      * 
      * @param ipAddress The IP address
