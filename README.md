@@ -14,6 +14,10 @@ It will have the following features:
 
 In the future, helpers and examples will be added to this project.
 
+## Documentation
+
+Genrated javadoc can be found at https://bastientauran.github.io/Networks
+
 ## Libraries needed
 
 Libraries are tested using JUnit:
