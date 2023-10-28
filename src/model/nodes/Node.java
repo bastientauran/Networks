@@ -89,6 +89,15 @@ public abstract class Node {
     }
 
     /**
+     * Get the number interfaces connected to this node
+     * 
+     * @return Number of interfaces connected to this node
+     */
+    public int getNumberInterfaces() {
+        return this.interfaces.size();
+    }
+
+    /**
      * Get list on interfaces connected to this node
      * 
      * @return List of interfaces
