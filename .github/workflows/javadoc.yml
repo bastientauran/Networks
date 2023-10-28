@@ -1,4 +1,4 @@
-#from https://github.com/marketplace/actions/deploy-publish-javadoc
+#from https://github.com/tonycituk/automated-javadoc/tree/main
 
 name: Deploy Javadoc
 
@@ -8,14 +8,19 @@ on:
       - '*'
 
 jobs:
-  publish:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy JavaDoc 🚀
-        uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          javadoc-branch: javadoc
-          java-version: 17
-          target-folder: javadoc
-          custom-command: javadoc -d doc/javadoc -sourcepath src -subpackages example helper model.node model.network model.link model.simulator
+        - name: Checkout 🛎️
+          uses: actions/checkout@v2
+        - name: Install and Build 🔧
+          uses: actions/setup-java@v2
+          with:
+            distribution: 'zulu'
+            java-version: '17'
+        - run: javadoc -sourcepath ./src -d ./docs -subpackages main.java
+        - name: Deploy 🚀
+          uses: JamesIves/github-pages-deploy-action@v4.2.3
+          with:
+            branch: docs
+            folder: docs
