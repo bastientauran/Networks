@@ -16,5 +16,5 @@ jobs:
           javadoc-branch: javadoc
           java-version: 17
           target-folder: javadoc 
-          project: gradle
-          custom-command: javadoc -d javadoc -sourcepath src/main/java -subpackages .
+          project: Networks
+          custom-command: javadoc -d doc/javadoc -sourcepath src -subpackages example helper model.node model.network model.link model.simulator
