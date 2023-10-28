@@ -1,3 +1,5 @@
+#from https://github.com/marketplace/actions/deploy-publish-javadoc
+
 name: Deploy Javadoc
 
 on:
@@ -15,6 +17,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           javadoc-branch: javadoc
           java-version: 17
-          target-folder: javadoc 
-          project: Networks
+          target-folder: javadoc
           custom-command: javadoc -d doc/javadoc -sourcepath src -subpackages example helper model.node model.network model.link model.simulator
