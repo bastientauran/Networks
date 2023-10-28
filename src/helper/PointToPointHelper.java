@@ -79,6 +79,39 @@ public class PointToPointHelper {
     }
 
     /**
+     * Install a new link between two nodes
+     * 
+     * @param src          First node to link
+     * @param dst          Second node to link
+     * @param ipAddressSrc Source IP address
+     * @param ipAddressDst Destination IP address
+     * @return The pair of interfaces created
+     */
+    public Pair<Interface, Interface> install(Node src, Node dst, IpAddress ipAddressSrc, IpAddress ipAddressDst) {
+        if (!ipAddressSrc.isInNetwork(ipAddressDst)) {
+            throw new IllegalArgumentException("Source IP address is not in same network than destination");
+        }
+        if (!ipAddressDst.isInNetwork(ipAddressSrc)) {
+            throw new IllegalArgumentException("Source IP address is not in same network than destination");
+        }
+
+        PointToPointLink pointToPointLink = new PointToPointLink();
+        pointToPointLink.setBandwidthBytesPerSecond(this.bandwidthBytesPerSecond);
+        pointToPointLink.setDelay(this.delay);
+
+        Interface interfaceSrc = new Interface("ens" + (src.getNumberInterfaces() + 3), src, pointToPointLink);
+        Interface interfaceDst = new Interface("ens" + (dst.getNumberInterfaces() + 3), dst, pointToPointLink);
+
+        interfaceSrc.setIpAddress(ipAddressSrc);
+        interfaceDst.setIpAddress(ipAddressDst);
+
+        src.addInterface(interfaceSrc);
+        dst.addInterface(interfaceDst);
+
+        return new Pair<Interface, Interface>(interfaceSrc, interfaceDst);
+    }
+
+    /**
      * Set the bandwidth of the link to create
      * 
      * @param bandwidthBytesPerSecond The bandwidth in bytes per sencond

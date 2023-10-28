@@ -83,6 +83,34 @@ public class PointToPointLinkTest {
     }
 
     @Test
+    public void testSendOnePacketViaHelper2() {
+        EndDevice nodeSrc = new EndDevice("src");
+        EndDevice nodeDst = new EndDevice("dst");
+
+        PointToPointHelper p2pHelper = new PointToPointHelper(1000, new Time(50, 0));
+        Pair<Interface, Interface> interfaces = p2pHelper.install(nodeSrc, nodeDst, new IpAddress("192.168.0.2/24"), new IpAddress("192.168.0.4/24"));
+
+        Interface interfaceSrc = interfaces.first;
+        Interface interfaceDst = interfaces.first;
+
+        nodeSrc.getRoutingTable().addEntry(new IpAddress("192.168.0.0/24"), interfaceSrc, new IpAddress("192.168.0.4"));
+        nodeDst.getRoutingTable().addEntry(new IpAddress("192.168.0.0/24"), interfaceDst, new IpAddress("192.168.0.2"));
+
+        nodeSrc.getArpTable().addEntry(new IpAddress("192.168.0.4"), interfaceDst.getMacAddress());
+        nodeDst.getArpTable().addEntry(new IpAddress("192.168.0.2"), interfaceSrc.getMacAddress());
+
+        Simulator.getInstance().reset();
+        Simulator.getInstance().setStopTime(new Time(1000, 0));
+
+        Packet packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
+
+        Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet, new IpAddress("192.168.0.4"));
+        Simulator.getInstance().run();
+
+        assertEquals(new Time(51, 0), Simulator.getInstance().getCurrentTime());
+    }
+
+    @Test
     public void testSendFivePackets() {
         EndDevice nodeSrc = new EndDevice("src");
         EndDevice nodeDst = new EndDevice("dst");
