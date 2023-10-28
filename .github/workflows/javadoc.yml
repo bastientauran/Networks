@@ -18,7 +18,7 @@ jobs:
           with:
             distribution: 'zulu'
             java-version: '17'
-        - run: javadoc -sourcepath ./src -d ./docs -subpackages main.java
+        - run: javadoc -d doc/javadoc -sourcepath src -subpackages example helper model.node model.network model.link model.simulator
         - name: Deploy 🚀
           uses: JamesIves/github-pages-deploy-action@v4.2.3
           with:
