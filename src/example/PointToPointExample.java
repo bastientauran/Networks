@@ -1,16 +1,25 @@
+package example;
+
 import helper.PointToPointHelper;
 import model.network.IpAddress;
 import model.network.IpHeader;
 import model.network.MacHeader;
 import model.network.Packet;
-import model.nodes.EndDevice;
-import model.nodes.Interface;
+import model.node.EndDevice;
+import model.node.Interface;
 import model.simulator.SchedulableMethod;
 import model.simulator.Simulator;
 import model.simulator.Time;
 import utils.Pair;
 
-public class NetworksMain {
+/**
+ * Simple example building two end devices with a point to point link between them.
+ * Some packets are manually sent
+ * 
+ * @author Bastien Tauran
+ * @version 1.0
+ */
+public class PointToPointExample {
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
 

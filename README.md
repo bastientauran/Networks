@@ -1,6 +1,6 @@
 # Networks
 
-This project is in beta version.
+This project is in alpha version.
 
 ## Goal
 

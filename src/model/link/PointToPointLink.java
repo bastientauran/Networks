@@ -1,7 +1,7 @@
 package model.link;
 
 import model.network.Packet;
-import model.nodes.Interface;
+import model.node.Interface;
 import model.simulator.Schedulable;
 import model.simulator.SchedulableMethod;
 import model.simulator.Simulator;

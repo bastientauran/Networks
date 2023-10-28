@@ -2,8 +2,8 @@ package helper;
 
 import model.link.PointToPointLink;
 import model.network.IpAddress;
-import model.nodes.Interface;
-import model.nodes.Node;
+import model.node.Interface;
+import model.node.Node;
 import model.simulator.Time;
 import utils.Pair;
 

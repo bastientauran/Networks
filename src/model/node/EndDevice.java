@@ -1,4 +1,4 @@
-package model.nodes;
+package model.node;
 
 import model.network.Header;
 import model.network.HeaderType;

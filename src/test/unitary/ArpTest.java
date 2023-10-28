@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import model.network.IpAddress;
 import model.network.MacAddress;
-import model.nodes.ArpTable;
+import model.node.ArpTable;
 
 public class ArpTest {
 
