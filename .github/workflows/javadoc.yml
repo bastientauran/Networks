@@ -1,0 +1,28 @@
+# from https://github.com/tonycituk/automated-javadoc/tree/main
+# and  https://github.com/JamesIves/github-pages-deploy-action
+
+name: Deploy Javadoc
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout 🛎️
+          uses: actions/checkout@v2
+        - name: Install and Build 🔧
+          uses: actions/setup-java@v2
+          with:
+            distribution: 'zulu'
+            java-version: '17'
+        - run: javadoc -d doc/javadoc -sourcepath src -subpackages model.nodes model.network model.link model.simulator
+        - name: Deploy 🚀
+          uses: JamesIves/github-pages-deploy-action@v4.2.3
+          with:
+            branch: gh-pages
+            folder: doc/javadoc
+            single-commit: true
