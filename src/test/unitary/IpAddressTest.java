@@ -98,6 +98,23 @@ public class IpAddressTest {
    }
 
    @Test
+   public void testNext() {
+      IpAddress address = new IpAddress("192.168.100.1/24");
+      assertEquals(new IpAddress("192.168.100.2/24"), address.getNextAddress());
+
+      address = new IpAddress("192.168.100.255/16");
+      assertEquals(new IpAddress("192.168.101.0/16"), address.getNextAddress());
+
+      assertThrows(
+            IllegalArgumentException.class,
+            () -> new IpAddress("192.168.100.255/24").getNextAddress());
+
+      assertThrows(
+            IllegalArgumentException.class,
+            () -> new IpAddress("255.255.255.255/0").getNextAddress());
+   }
+
+   @Test
    public void testIncorrectValue() {
       assertThrows(
             IllegalArgumentException.class,

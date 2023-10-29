@@ -160,6 +160,29 @@ public class IpAddress implements Comparable<IpAddress> {
     }
 
     /**
+     * Get the IP address just after the current one.
+     * It only increases address value by one if possible
+     * 
+     * @return The next IP address
+     */
+    public IpAddress getNextAddress() {
+        IpAddress next = new IpAddress(this);
+
+        for (int i = 3; i >= 0; i--) {
+            if (next.address[i] != 255) {
+                next.address[i]++;
+                if (!this.getNetwork().equals(next.getNetwork())) {
+                    throw new IllegalArgumentException("Cannot bump address");
+                }
+                return next;
+            }
+            next.address[i] = 0;
+        }
+
+        throw new IllegalArgumentException("Cannot bump address");
+    }
+
+    /**
      * Get mask of this address
      * 
      * @return The IP address mask

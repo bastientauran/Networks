@@ -1,6 +1,6 @@
 # Networks
 
-This project is in beta version.
+This project is in alpha version.
 
 ## Goal
 
@@ -13,6 +13,10 @@ It will have the following features:
  - Traces and logs generated
 
 In the future, helpers and examples will be added to this project.
+
+## Documentation
+
+Generated javadoc can be found on [GH pages](https://bastientauran.github.io/Networks).
 
 ## Libraries needed
 

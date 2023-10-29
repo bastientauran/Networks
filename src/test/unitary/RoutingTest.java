@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import model.link.PointToPointLink;
 import model.network.IpAddress;
-import model.nodes.Interface;
-import model.nodes.RoutingTable;
+import model.node.Interface;
+import model.node.RoutingTable;
 
 public class RoutingTest {
 

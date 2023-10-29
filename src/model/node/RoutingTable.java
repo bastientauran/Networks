@@ -1,4 +1,4 @@
-package model.nodes;
+package model.node;
 
 import java.util.HashMap;
 

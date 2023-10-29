@@ -1,4 +1,4 @@
-package model.nodes;
+package model.node;
 
 import java.util.ArrayList;
 
@@ -86,6 +86,15 @@ public abstract class Node {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * Get the number interfaces connected to this node
+     * 
+     * @return Number of interfaces connected to this node
+     */
+    public int getNumberInterfaces() {
+        return this.interfaces.size();
     }
 
     /**
