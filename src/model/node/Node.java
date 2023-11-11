@@ -63,14 +63,6 @@ public abstract class Node {
     public abstract void receive(Packet packet);
 
     /**
-     * Forward a new Packet to the next interface.
-     * This method does not add an IP header
-     * 
-     * @param packet The packet to forward
-     */
-    public abstract void forward(Packet packet);
-
-    /**
      * Add a new interface to this node
      * 
      * @param interf The interface to add

@@ -13,7 +13,8 @@ import model.simulator.Time;
 import utils.Pair;
 
 /**
- * Simple example building two end devices with a point to point link between them.
+ * Simple example building two end devices with a point to point link between
+ * them.
  * Some packets are manually sent
  * 
  * @author Bastien Tauran
@@ -30,7 +31,7 @@ public class PointToPointExample {
         Pair<Interface, Interface> interfaces = p2pHelper.install(nodeSrc, nodeDst, new IpAddress("192.168.0.0/24"));
 
         Interface interfaceSrc = interfaces.first;
-        Interface interfaceDst = interfaces.first;
+        Interface interfaceDst = interfaces.second;
 
         nodeSrc.getRoutingTable().addEntry(new IpAddress("192.168.0.0/24"), interfaceSrc, new IpAddress("192.168.0.2"));
         nodeDst.getRoutingTable().addEntry(new IpAddress("192.168.0.0/24"), interfaceDst, new IpAddress("192.168.0.1"));
@@ -43,7 +44,7 @@ public class PointToPointExample {
 
         Packet packet;
         for (int i = 0; i < 5; i++) {
-            packet = new Packet(1000 - new MacHeader().getSize() - new IpHeader().getSize());
+            packet = new Packet("Packet " + i, 1000 - new MacHeader().getSize() - new IpHeader().getSize());
             Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet,
                     interfaceDst.getIpAddress());
         }

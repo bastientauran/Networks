@@ -1,5 +1,8 @@
 package model.node;
 
+import model.io.Layer;
+import model.io.PacketEvent;
+import model.io.PacketTracer;
 import model.network.Header;
 import model.network.HeaderType;
 import model.network.IpAddress;
@@ -47,6 +50,8 @@ public class EndDevice extends Node implements Schedulable {
             IpHeader ipHeader = new IpHeader(addressSrc, addressDst);
             packet.addHeader(ipHeader);
 
+            PacketTracer.getInstance().tracePacket(this.getName(), Layer.NETWORK, PacketEvent.SEND, packet);
+
             routingEntry.first.enque(packet, routingEntry.second);
         } else {
             System.out.println("No route to destination, dropping packet");
@@ -55,6 +60,9 @@ public class EndDevice extends Node implements Schedulable {
 
     @Override
     public void receive(Packet packet) {
+
+        PacketTracer.getInstance().tracePacket(this.getName(), Layer.NETWORK, PacketEvent.RECEIVE, packet);
+
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() != HeaderType.IP_HEADER) {
@@ -70,12 +78,10 @@ public class EndDevice extends Node implements Schedulable {
                 return;
             }
         }
-
-        forward(packet);
     }
 
-    @Override
-    public void forward(Packet packet) {
+    // TODO only for routers
+    /*public void forward(Packet packet) {
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() != HeaderType.IP_HEADER) {
@@ -90,7 +96,7 @@ public class EndDevice extends Node implements Schedulable {
         } else {
             System.out.println("No route to destination, dropping packet");
         }
-    }
+    }*/
 
     @Override
     public void run(SchedulableMethod method, Object[] arguments) {

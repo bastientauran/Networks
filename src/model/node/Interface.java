@@ -2,6 +2,9 @@ package model.node;
 
 import java.util.LinkedList;
 
+import model.io.Layer;
+import model.io.PacketEvent;
+import model.io.PacketTracer;
 import model.link.Link;
 import model.network.Header;
 import model.network.HeaderType;
@@ -118,8 +121,11 @@ public class Interface {
         }
 
         if (this.queue.size() == this.queueSizeMaxPackets) {
+            PacketTracer.getInstance().tracePacket(this.node.getName(), Layer.MAC, PacketEvent.DROP, packet);
             return false;
         }
+
+        PacketTracer.getInstance().tracePacket(this.node.getName(), Layer.MAC, PacketEvent.ENQUE, packet);
         this.queue.add(packet);
 
         return true;
@@ -133,9 +139,11 @@ public class Interface {
      */
     public void receive(Packet packet) {
 
+        PacketTracer.getInstance().tracePacket(this.node.getName(), Layer.MAC, PacketEvent.RECEIVE, packet);
+
         MacHeader macHeader = (MacHeader) packet.popHeader();
 
-        if (macHeader.getDestination() == this.macAddress) {
+        if (macHeader.getDestination().equals(this.macAddress)) {
             this.node.receive(packet);
         }
     }
@@ -150,6 +158,8 @@ public class Interface {
             throw new IllegalStateException("Cannot send a packet while another is already being sent");
         }
         this.isSending = true;
+
+        PacketTracer.getInstance().tracePacket(this.node.getName(), Layer.MAC, PacketEvent.SEND, packet);
 
         this.link.startTx(packet, this);
     }
@@ -216,6 +226,15 @@ public class Interface {
      */
     public MacAddress getMacAddress() {
         return this.macAddress;
+    }
+
+    /**
+     * Get Node associated to this interface
+     * 
+     * @return The node associated to this interface
+     */
+    public Node getNode() {
+        return this.node;
     }
 
     /**

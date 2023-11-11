@@ -68,4 +68,9 @@ public class IpHeader extends Header {
         return "[IP header: source=" + this.source.toStringNoMask() + ", destination="
                 + this.destination.toStringNoMask() + "]";
     }
+
+    @Override
+    public String formatToTrace() {
+        return this.source.toStringNoMask() + " " + this.destination.toStringNoMask();
+    }
 }

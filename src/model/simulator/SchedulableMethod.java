@@ -19,8 +19,19 @@ public enum SchedulableMethod {
     POINT_TO_POINT_LINK__END_RX("PointToPointLink", "endRx", new Class<?>[] { Packet.class, Integer.class }),
     END_DEVICE__SEND("EndDevice", "send", new Class<?>[] { Packet.class, IpAddress.class });
 
+    /**
+     * Name of class that launch this method
+     */
     private String className;
+
+    /**
+     * The name of the method
+     */
     private String methodName;
+
+    /**
+     * Array containing all the argument types needed by this method
+     */
     private Class<?>[] argumentTypes;
 
     /**

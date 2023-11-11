@@ -67,4 +67,9 @@ public class MacHeader extends Header {
     public String toString() {
         return "[MAC header: source=" + this.source + ", destination=" + this.destination + "]";
     }
+
+    @Override
+    public String formatToTrace() {
+        return this.source + " " + this.destination;
+    }
 }

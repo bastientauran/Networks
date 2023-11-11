@@ -4,7 +4,8 @@ import java.util.Stack;
 
 /**
  * Class representing a packet.
- * It is represented by a payload (with a size and an optional String representation),
+ * It is represented by a payload (with a size and an optional String
+ * representation),
  * and headers, using a LIFO rule.
  * 
  * @author Bastien Tauran
@@ -124,14 +125,35 @@ public class Packet {
         return this.payload;
     }
 
-
     @Override
     public String toString() {
         String str = "Packet: ";
-        for(int i = this.headers.size() - 1; i >= 0; i--) {
+        for (int i = this.headers.size() - 1; i >= 0; i--) {
             str += this.headers.elementAt(i);
         }
-        str += "[payload='" + this.payload + "', payloadSize=" + this.payloadSizeBytes + ", totalSize=" + this.getTotalSizeBytes() + "]";
+        str += "[payload='" + this.payload + "', payloadSize=" + this.payloadSizeBytes + ", totalSize="
+                + this.getTotalSizeBytes() + "]";
         return str;
+    }
+
+    /**
+     * Format headers and payload to be printed in a trace file
+     * 
+     * @return String representation of the packet to trace
+     */
+    public String formatToTrace() {
+        String[] output = new String[this.headers.size() + 1];
+        int i = 0;
+        for (Header e : this.headers) {
+            output[i] = e.formatToTrace();
+            i++;
+        }
+        if (this.payload != "") {
+            output[this.headers.size()] = this.payload;
+        } else {
+            output[this.headers.size()] = "NoPayload";
+        }
+
+        return String.join(" ", output);
     }
 }

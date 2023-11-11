@@ -2,6 +2,8 @@ package model.simulator;
 
 import java.util.TreeSet;
 
+import model.io.PacketTracer;
+
 /**
  * The simulator is used to scehdule events in the future.
  * It uses Singleton template.
@@ -133,6 +135,9 @@ public class Simulator {
         if (this.stopTime.compareTo(new Time()) == 0) {
             throw new IllegalStateException("Stop time not set");
         }
+
+        PacketTracer.getInstance().initTrace();
+
         this.running = true;
         for (Event e : this.events) {
             if (e.getTime().compareTo(this.stopTime) > 0) {
@@ -146,6 +151,8 @@ public class Simulator {
             e.runEvent();
         }
         this.running = false;
+
+        PacketTracer.getInstance().closeTrace();
     }
 
     /**
