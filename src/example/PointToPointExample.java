@@ -15,7 +15,16 @@ import utils.Pair;
 /**
  * Simple example building two end devices with a point to point link between
  * them.
- * Some packets are manually sent
+ * Some packets are manually sent.
+ * 
+ * The topology is as follows
+ * 
+ * <pre>
+ * 192.168.0.1/24                            192.168.0.2/24
+ * +----------+                              +----------+
+ * |  Node 1  |------------------------------|  Node 2  |
+ * +----------+          1kB/s, 50s          +----------+
+ * </pre>
  * 
  * @author Bastien Tauran
  * @version 1.0
