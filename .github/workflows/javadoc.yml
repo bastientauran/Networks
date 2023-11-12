@@ -6,7 +6,10 @@ name: Deploy Javadoc
 on:
   push:
     branches:
-      - '*'
+      - main
+  pull_request:
+    breanches:
+      - main
 
 jobs:
   build-and-deploy:

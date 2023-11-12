@@ -16,7 +16,7 @@ In the future, helpers and examples will be added to this project.
 
 ## Documentation
 
-Generated javadoc can be found on [GH pages](https://bastientauran.github.io/Networks).
+Generated javadoc for latest commit on main branch can be found on [GH pages](https://bastientauran.github.io/Networks).
 
 ## Libraries needed
 
