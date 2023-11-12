@@ -2,6 +2,8 @@ package model.network;
 
 import java.util.Stack;
 
+import model.utils.IdGenerator;
+
 /**
  * Class representing a packet.
  * It is represented by a payload (with a size and an optional String
@@ -13,6 +15,11 @@ import java.util.Stack;
  * @see Header
  */
 public class Packet {
+
+    /**
+     * ID of the packet, generated automatically
+     */
+    protected int packetId;
 
     /**
      * Payload of the packet
@@ -33,6 +40,7 @@ public class Packet {
      * Default constructor
      */
     public Packet() {
+        this.packetId = IdGenerator.getInstance().getNextPacketId();
         this.payload = "";
         this.payloadSizeBytes = 0;
         this.headers = new Stack<Header>();
@@ -44,6 +52,7 @@ public class Packet {
      * @param payloadSizeBytes The packet payload size in bytes
      */
     public Packet(int payloadSizeBytes) {
+        this.packetId = IdGenerator.getInstance().getNextPacketId();
         this.payload = "";
         this.payloadSizeBytes = payloadSizeBytes;
         this.headers = new Stack<Header>();
@@ -56,6 +65,7 @@ public class Packet {
      * @param payloadSizeBytes The packet payload size in bytes
      */
     public Packet(String payload, int payloadSizeBytes) {
+        this.packetId = IdGenerator.getInstance().getNextPacketId();
         this.payload = payload;
         this.payloadSizeBytes = payloadSizeBytes;
         this.headers = new Stack<Header>();
@@ -154,6 +164,6 @@ public class Packet {
             output[this.headers.size()] = "NoPayload";
         }
 
-        return String.join(" ", output);
+        return this.packetId + " " + String.join(" ", output);
     }
 }

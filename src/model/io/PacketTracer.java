@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 
 import model.network.Packet;
 import model.simulator.Simulator;
+import model.utils.Layer;
+import model.utils.PacketEvent;
 
 /**
  * Class used to trace all packets transmissions
@@ -60,23 +62,20 @@ public class PacketTracer {
         return instance;
     }
 
-    // TODO change to node ID ?
-    // TODO add packet ID ?
-
     /**
      * Write a new line to the log file, corresponding to a packet.
      * Write the details of the node calling the tracer, and the details of the
      * packet
      * 
-     * @param nodeName Name of the node tracing the packet
-     * @param layer    Layer of the node that calls the trace
-     * @param event    Event on the packet
-     * @param packet   The packet to trace
+     * @param nodeId ID of the node tracing the packet
+     * @param layer  Layer of the node that calls the trace
+     * @param event  Event on the packet
+     * @param packet The packet to trace
      */
-    public void tracePacket(String nodeName, Layer layer, PacketEvent event, Packet packet) {
+    public void tracePacket(int nodeId, Layer layer, PacketEvent event, Packet packet) {
         if (this.writer != null) {
             this.writer.write(Simulator.getInstance().getCurrentTime() + " ");
-            this.writer.write(nodeName + " " + layer + " " + event + " ");
+            this.writer.write(nodeId + " " + layer + " " + event + " ");
             this.writer.write(packet.formatToTrace() + "\n");
         }
     }
@@ -87,7 +86,7 @@ public class PacketTracer {
     public void initTrace() {
         this.writer.write("Packet trace\n");
         this.writer.write("============\n");
-        this.writer.write("Format: Time NodeName Layer Event HeadersDetails Payload\n\n");
+        this.writer.write("Format: Time NodeId Layer Event PacketId HeadersDetails Payload\n\n");
     }
 
     /**

@@ -1,7 +1,7 @@
 package model.link;
 
-import model.io.Layer;
-import model.io.PacketEvent;
+import model.utils.Layer;
+import model.utils.PacketEvent;
 import model.io.PacketTracer;
 import model.network.Packet;
 import model.node.Interface;
@@ -96,7 +96,7 @@ public class PointToPointLink extends Link implements Schedulable {
             throw new IllegalStateException("Point to point link does not have both itnterfaces connected");
         }
 
-        PacketTracer.getInstance().tracePacket(src.getNode().getName(), Layer.PHYSICAL, PacketEvent.SEND, packet);
+        PacketTracer.getInstance().tracePacket(src.getNode().getNodeId(), Layer.PHYSICAL, PacketEvent.SEND, packet);
 
         int direction = this.directions[0].src == src ? 0 : 1;
 
@@ -146,7 +146,7 @@ public class PointToPointLink extends Link implements Schedulable {
      * @param direction The direction of the link used
      */
     public void endRx(Packet packet, int direction) {
-        PacketTracer.getInstance().tracePacket(this.directions[direction].dst.getNode().getName(), Layer.PHYSICAL, PacketEvent.RECEIVE, packet);
+        PacketTracer.getInstance().tracePacket(this.directions[direction].dst.getNode().getNodeId(), Layer.PHYSICAL, PacketEvent.RECEIVE, packet);
 
         this.directions[direction].dst.endRx(packet);
     }

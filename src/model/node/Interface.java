@@ -2,8 +2,8 @@ package model.node;
 
 import java.util.LinkedList;
 
-import model.io.Layer;
-import model.io.PacketEvent;
+import model.utils.Layer;
+import model.utils.PacketEvent;
 import model.io.PacketTracer;
 import model.link.Link;
 import model.network.Header;
@@ -121,11 +121,11 @@ public class Interface {
         }
 
         if (this.queue.size() == this.queueSizeMaxPackets) {
-            PacketTracer.getInstance().tracePacket(this.node.getName(), Layer.MAC, PacketEvent.DROP, packet);
+            PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.DROP, packet);
             return false;
         }
 
-        PacketTracer.getInstance().tracePacket(this.node.getName(), Layer.MAC, PacketEvent.ENQUE, packet);
+        PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.ENQUE, packet);
         this.queue.add(packet);
 
         return true;
@@ -139,7 +139,7 @@ public class Interface {
      */
     public void receive(Packet packet) {
 
-        PacketTracer.getInstance().tracePacket(this.node.getName(), Layer.MAC, PacketEvent.RECEIVE, packet);
+        PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.RECEIVE, packet);
 
         MacHeader macHeader = (MacHeader) packet.popHeader();
 
@@ -159,7 +159,7 @@ public class Interface {
         }
         this.isSending = true;
 
-        PacketTracer.getInstance().tracePacket(this.node.getName(), Layer.MAC, PacketEvent.SEND, packet);
+        PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.SEND, packet);
 
         this.link.startTx(packet, this);
     }

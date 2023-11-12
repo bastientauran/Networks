@@ -22,8 +22,6 @@ import utils.Pair;
  */
 public class PointToPointExample {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
-
         EndDevice nodeSrc = new EndDevice("src");
         EndDevice nodeDst = new EndDevice("dst");
 
@@ -45,7 +43,7 @@ public class PointToPointExample {
 
         Packet packet;
         for (int i = 0; i < 5; i++) {
-            packet = new Packet("Packet " + i, 1000 - new MacHeader().getSize() - new IpHeader().getSize());
+            packet = new Packet("Packet " + (i + 1), 1000 - new MacHeader().getSize() - new IpHeader().getSize());
             Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet,
                     interfaceDst.getIpAddress());
         }

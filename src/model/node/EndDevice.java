@@ -1,7 +1,7 @@
 package model.node;
 
-import model.io.Layer;
-import model.io.PacketEvent;
+import model.utils.Layer;
+import model.utils.PacketEvent;
 import model.io.PacketTracer;
 import model.network.Header;
 import model.network.HeaderType;
@@ -50,7 +50,7 @@ public class EndDevice extends Node implements Schedulable {
             IpHeader ipHeader = new IpHeader(addressSrc, addressDst);
             packet.addHeader(ipHeader);
 
-            PacketTracer.getInstance().tracePacket(this.getName(), Layer.NETWORK, PacketEvent.SEND, packet);
+            PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.SEND, packet);
 
             routingEntry.first.enque(packet, routingEntry.second);
         } else {
@@ -61,7 +61,7 @@ public class EndDevice extends Node implements Schedulable {
     @Override
     public void receive(Packet packet) {
 
-        PacketTracer.getInstance().tracePacket(this.getName(), Layer.NETWORK, PacketEvent.RECEIVE, packet);
+        PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.RECEIVE, packet);
 
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
