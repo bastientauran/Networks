@@ -21,6 +21,11 @@ public class Simulator {
     private static Simulator instance;
 
     /**
+     * Name of the scenario
+     */
+    private String scenarioName;
+
+    /**
      * Current time in simulation
      */
     private Time currentTime;
@@ -49,6 +54,7 @@ public class Simulator {
      * Private constructor
      */
     private Simulator() {
+        this.scenarioName = "";
         this.currentTime = new Time();
         this.stopTime = new Time();
         this.running = false;
@@ -75,6 +81,7 @@ public class Simulator {
         if (this.running == true) {
             throw new IllegalStateException("Cannot reset simulation when running");
         }
+        this.scenarioName = "";
         this.currentTime = new Time();
         this.stopTime = new Time();
         this.events = new TreeSet<Event>();
@@ -136,7 +143,9 @@ public class Simulator {
             throw new IllegalStateException("Stop time not set");
         }
 
-        PacketTracer.getInstance().initTrace();
+        if (this.scenarioName != "") {
+            PacketTracer.getInstance().initTrace();
+        }
 
         this.running = true;
         for (Event e : this.events) {
@@ -152,7 +161,9 @@ public class Simulator {
         }
         this.running = false;
 
-        PacketTracer.getInstance().closeTrace();
+        if (this.scenarioName != "") {
+            PacketTracer.getInstance().closeTrace();
+        }
     }
 
     /**
@@ -180,4 +191,23 @@ public class Simulator {
         }
         return true;
     }
+
+    /**
+     * Get scenario name
+     * 
+     * @return Scenario name
+     */
+    public String getScenarioName() {
+        return this.scenarioName;
+    }
+
+    /**
+     * Set scenario name
+     * 
+     * @param scenarioName
+     */
+    public void setScenarioName(String scenarioName) {
+        this.scenarioName = scenarioName;
+    }
+
 }

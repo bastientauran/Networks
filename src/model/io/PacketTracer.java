@@ -33,12 +33,18 @@ public class PacketTracer {
      * Private constructor
      */
     private PacketTracer() {
-        try {
-            File file = new File("out/simulation/PacketTrace.log");
-            file.getParentFile().mkdirs();
-            this.writer = new PrintWriter(new FileWriter(file));
-        } catch (IOException e) {
-            // TODO STOP
+        String scenarioName = Simulator.getInstance().getScenarioName();
+        if (scenarioName != "") {
+            String path = "out/simulation" + "/" + scenarioName + "/PacketTrace.log";
+            try {
+                File file = new File(path);
+                file.getParentFile().mkdirs();
+                this.writer = new PrintWriter(new FileWriter(file));
+            } catch (IOException e) {
+                // TODO STOP
+            }
+        } else {
+            this.writer = null;
         }
     }
 
@@ -63,14 +69,16 @@ public class PacketTracer {
      * packet
      * 
      * @param nodeName Name of the node tracing the packet
-     * @param layer  Layer of the node that calls the trace
-     * @param event  Event on the packet
-     * @param packet The packet to trace
+     * @param layer    Layer of the node that calls the trace
+     * @param event    Event on the packet
+     * @param packet   The packet to trace
      */
     public void tracePacket(String nodeName, Layer layer, PacketEvent event, Packet packet) {
-        this.writer.write(Simulator.getInstance().getCurrentTime() + " ");
-        this.writer.write(nodeName + " " + layer + " " + event + " ");
-        this.writer.write(packet.formatToTrace() + "\n");
+        if (this.writer != null) {
+            this.writer.write(Simulator.getInstance().getCurrentTime() + " ");
+            this.writer.write(nodeName + " " + layer + " " + event + " ");
+            this.writer.write(packet.formatToTrace() + "\n");
+        }
     }
 
     /**
@@ -87,6 +95,7 @@ public class PacketTracer {
      */
     public void closeTrace() {
         this.writer.close();
+        this.writer = null;
     }
 
 }
