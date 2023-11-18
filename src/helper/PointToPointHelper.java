@@ -5,7 +5,7 @@ import model.network.IpAddress;
 import model.node.Interface;
 import model.node.Node;
 import model.simulator.Time;
-import utils.Pair;
+import model.utils.Pair;
 
 /**
  * Helper used to build a new point to Point link
@@ -37,7 +37,7 @@ public class PointToPointHelper {
     /**
      * Constructor witrh custom attribute values
      * 
-     * @param bandwidthBytesPerSecond The bandwith of link in bytes per sencond
+     * @param bandwidthBytesPerSecond The bandwith of link in bytes per second
      * @param delay                   The delay of the link
      */
     public PointToPointHelper(int bandwidthBytesPerSecond, Time delay) {

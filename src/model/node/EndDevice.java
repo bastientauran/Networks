@@ -10,7 +10,7 @@ import model.network.IpHeader;
 import model.network.Packet;
 import model.simulator.Schedulable;
 import model.simulator.SchedulableMethod;
-import utils.Pair;
+import model.utils.Pair;
 
 /**
  * Class representing a End Device
