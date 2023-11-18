@@ -3,6 +3,8 @@ package model.simulator;
 import java.util.TreeSet;
 
 import model.io.PacketTracer;
+import model.logger.LogSeverity;
+import model.logger.Logger;
 
 /**
  * The simulator is used to scehdule events in the future.
@@ -148,12 +150,14 @@ public class Simulator {
         }
 
         this.running = true;
+        Logger.getInstance().log(LogSeverity.INFO, "Launch Simulation");
         for (Event e : this.events) {
             if (e.getTime().compareTo(this.stopTime) > 0) {
                 this.events.tailSet(e).clear();
                 break;
             }
         }
+
         while (!this.events.isEmpty()) {
             Event e = this.events.pollFirst();
             this.currentTime = e.getTime();
@@ -164,6 +168,9 @@ public class Simulator {
         if (this.scenarioName != "") {
             PacketTracer.getInstance().closeTrace();
         }
+
+        PacketTracer.destroy();
+        Logger.destroy();
     }
 
     /**

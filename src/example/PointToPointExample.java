@@ -1,6 +1,8 @@
 package example;
 
 import helper.PointToPointHelper;
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.IpAddress;
 import model.network.IpHeader;
 import model.network.MacHeader;
@@ -56,6 +58,9 @@ public class PointToPointExample {
             Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet,
                     interfaceDst.getIpAddress());
         }
+
+        Logger.getInstance().enableLogger();
+        Logger.getInstance().setMinSveritylevel(LogSeverity.INFO);
 
         Simulator.getInstance().run();
     }

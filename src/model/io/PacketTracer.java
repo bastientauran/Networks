@@ -90,11 +90,18 @@ public class PacketTracer {
     }
 
     /**
-     * Close the PrinteWriter wirting to file
+     * Close the PrinteWriter writing to file
      */
     public void closeTrace() {
         this.writer.close();
         this.writer = null;
+    }
+
+    /**
+     * Destroy the instance of PacketTracer
+     */
+    public static void destroy() {
+        instance = null;
     }
 
 }
