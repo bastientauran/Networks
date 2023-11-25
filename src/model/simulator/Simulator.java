@@ -211,7 +211,7 @@ public class Simulator {
     /**
      * Set scenario name
      * 
-     * @param scenarioName
+     * @param scenarioName The scenario name
      */
     public void setScenarioName(String scenarioName) {
         this.scenarioName = scenarioName;

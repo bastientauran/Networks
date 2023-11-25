@@ -1,4 +1,4 @@
-package model.utils;
+package model.io;
 
 /**
  * All layers that can be traced in a simulation

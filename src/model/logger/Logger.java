@@ -1,7 +1,6 @@
 package model.logger;
 
 import model.simulator.Simulator;
-import model.utils.Layer;
 
 /**
  * Class used to trace all packets transmissions
@@ -9,8 +8,6 @@ import model.utils.Layer;
  * 
  * @author Bastien Tauran
  * @version 1.0
- * 
- * @see Layer
  */
 public class Logger {
 
@@ -93,8 +90,7 @@ public class Logger {
         }
 
         StackTraceElement[] stes = Thread.currentThread().getStackTrace();
-        if(stes.length < 3)
-        {
+        if (stes.length < 3) {
             return;
         }
         StackTraceElement ste = stes[2];
@@ -104,5 +100,13 @@ public class Logger {
         output += message;
 
         System.out.println(output);
+
+        if (logSeverity == LogSeverity.CRITICAL) {
+            System.out.println("Critical error encoutered, stopping simulation with stack trace:");
+            for (int i = 1; i < stes.length; i++) {
+                System.out.println("    " + stes[i]);
+            }
+            System.exit(1);
+        }
     }
 }

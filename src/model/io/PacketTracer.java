@@ -7,8 +7,6 @@ import java.io.PrintWriter;
 
 import model.network.Packet;
 import model.simulator.Simulator;
-import model.utils.Layer;
-import model.utils.PacketEvent;
 
 /**
  * Class used to trace all packets transmissions

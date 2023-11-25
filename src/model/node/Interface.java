@@ -2,8 +2,8 @@ package model.node;
 
 import java.util.LinkedList;
 
-import model.utils.Layer;
-import model.utils.PacketEvent;
+import model.io.Layer;
+import model.io.PacketEvent;
 import model.io.PacketTracer;
 import model.link.Link;
 import model.network.Header;

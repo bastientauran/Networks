@@ -1,4 +1,4 @@
-package model.utils;
+package model.io;
 
 /**
  * All packet events that can be traced in a simulation
