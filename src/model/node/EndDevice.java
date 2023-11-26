@@ -84,7 +84,7 @@ public class EndDevice extends Node implements Schedulable {
         }
     }
 
-    // TODO only for routers
+    // Only for routers
     /*public void forward(Packet packet) {
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
