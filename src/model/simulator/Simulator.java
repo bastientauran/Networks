@@ -81,7 +81,7 @@ public class Simulator {
      */
     public void reset() {
         if (this.running == true) {
-            throw new IllegalStateException("Cannot reset simulation when running");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot reset simulation when running");
         }
         this.scenarioName = "";
         this.currentTime = new Time();
@@ -97,7 +97,7 @@ public class Simulator {
      */
     public void setStopTime(Time stopTime) {
         if (stopTime.compareTo(new Time()) == 0) {
-            throw new IllegalStateException("Stop time must be strictly positive");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Stop time must be strictly positive");
         }
         this.stopTime = stopTime;
     }
@@ -121,12 +121,12 @@ public class Simulator {
      */
     public void schedule(Time time, Schedulable instance, SchedulableMethod method, Object... arguments) {
         if (time.compareTo(this.currentTime) < 0) {
-            throw new IllegalArgumentException("Cannot schedule in the past");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot schedule in the past");
         }
         if (checkArguments(method, arguments)) {
             if (this.running == true) {
                 if (time.compareTo(this.stopTime) > 0) {
-                    System.out.println("Trying to schedule event after stop simulation time");
+                    Logger.getInstance().log(LogSeverity.INFO, "Trying to schedule event after stop simulation time");
                     return;
                 }
             }
@@ -142,7 +142,7 @@ public class Simulator {
      */
     public void run() {
         if (this.stopTime.compareTo(new Time()) == 0) {
-            throw new IllegalStateException("Stop time not set");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Stop time not set");
         }
 
         if (this.scenarioName != "") {
@@ -165,6 +165,8 @@ public class Simulator {
         }
         this.running = false;
 
+        Logger.getInstance().log(LogSeverity.INFO, "Simulation finished");
+
         if (this.scenarioName != "") {
             PacketTracer.getInstance().closeTrace();
         }
@@ -184,7 +186,7 @@ public class Simulator {
     private boolean checkArguments(SchedulableMethod method, Object[] arguments) {
         Class<?>[] argumentTypes = method.getArgumentTypes();
         if (argumentTypes.length != arguments.length) {
-            throw new IllegalArgumentException(
+            Logger.getInstance().log(LogSeverity.CRITICAL,
                     "Schedule method " + method + " with the wrong number of arguments. Need " + argumentTypes.length
                             + " but got " + arguments.length);
         }
@@ -192,7 +194,7 @@ public class Simulator {
             try {
                 argumentTypes[i].cast(arguments[i]);
             } catch (ClassCastException e) {
-                throw new IllegalArgumentException(
+                Logger.getInstance().log(LogSeverity.CRITICAL,
                         "Cannot cast argument " + arguments[i] + " to class " + argumentTypes[i]);
             }
         }

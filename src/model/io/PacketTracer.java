@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.Packet;
 import model.simulator.Simulator;
 
@@ -36,12 +38,13 @@ public class PacketTracer {
         String scenarioName = Simulator.getInstance().getScenarioName();
         if (scenarioName != "") {
             String path = "out/simulation" + "/" + scenarioName + "/PacketTrace.log";
+            Logger.getInstance().log(LogSeverity.INFO, "Create PacketTracer on file " + path);
             try {
                 File file = new File(path);
                 file.getParentFile().mkdirs();
                 this.writer = new PrintWriter(new FileWriter(file));
             } catch (IOException e) {
-                // TODO STOP
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot open " + path + " for PacketTracer");
             }
         } else {
             this.writer = null;

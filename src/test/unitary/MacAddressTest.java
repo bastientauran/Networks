@@ -5,9 +5,10 @@ import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 
+import model.logger.NetworksCriticalException;
 import model.network.MacAddress;
 
-public class MacAddressTest {
+public class MacAddressTest extends GenericTest {
 
    @Test
    public void testEmptyConstructor() {
@@ -17,41 +18,41 @@ public class MacAddressTest {
 
    @Test
    public void testConstructorWithArray() {
-      MacAddress address = new MacAddress(new int[] { 0, 5, 6, 22, 7, 15 });
+      MacAddress address = new MacAddress(new int[] { 0, 5, 6, 22, 7, 15 }, true);
       assertEquals("00:05:06:16:07:0F", address.toString());
    }
 
    @Test
    public void testConstructorWithString() {
-      MacAddress address = new MacAddress("AA:BB:1E:F6:00:19");
+      MacAddress address = new MacAddress("AA:BB:1E:F6:00:19", true);
       assertEquals("AA:BB:1E:F6:00:19", address.toString());
    }
 
    @Test
    public void testEquals() {
-      MacAddress address = new MacAddress(new int[] { 0, 5, 6, 22, 7, 14 });
+      MacAddress address = new MacAddress(new int[] { 0, 5, 6, 22, 7, 14 }, true);
       assertThrows(
-            IllegalStateException.class,
-            () -> new MacAddress("00:05:06:16:07:0E"));
+            NetworksCriticalException.class,
+            () -> new MacAddress("00:05:06:16:07:0E", true));
       assertEquals("00:05:06:16:07:0E", address.toString());
    }
 
    @Test
    public void testIncorrectValue() {
       assertThrows(
-            IllegalArgumentException.class,
-            () -> new MacAddress(new int[] { -1, 5, 6, 22, 7, 15 }));
+            RuntimeException.class,
+            () -> new MacAddress(new int[] { -1, 5, 6, 22, 7, 15 }, true));
       assertThrows(
-            IllegalArgumentException.class,
-            () -> new MacAddress(new int[] { 256, 5, 6, 22, 7, 15 }));
+            RuntimeException.class,
+            () -> new MacAddress(new int[] { 256, 5, 6, 22, 7, 15 }, true));
       assertThrows(
-            IllegalArgumentException.class,
-            () -> new MacAddress("AA:BB:CC:DD:EE:GG"));
+            RuntimeException.class,
+            () -> new MacAddress("AA:BB:CC:DD:EE:GG", true));
       assertThrows(
-            IllegalArgumentException.class,
-            () -> new MacAddress("AA:BB:CC:DD:EE:-1"));
+            RuntimeException.class,
+            () -> new MacAddress("AA:BB:CC:DD:EE:-1", true));
       assertThrows(
-            IllegalArgumentException.class,
-            () -> new MacAddress("something"));
+            RuntimeException.class,
+            () -> new MacAddress("something", true));
    }
 }

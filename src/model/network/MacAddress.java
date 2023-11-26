@@ -1,5 +1,8 @@
 package model.network;
 
+import model.logger.LogSeverity;
+import model.logger.Logger;
+
 /**
  * This class represents a MAC address
  * 
@@ -28,49 +31,53 @@ public class MacAddress implements Comparable<MacAddress> {
     /**
      * MAC address constructor using array
      * 
-     * @param address The address to use
+     * @param address       The address to use
+     * @param checkExisting Check if address already exists in simulation
      */
-    public MacAddress(int[] address) {
+    public MacAddress(int[] address, boolean checkExisting) {
         if (address.length != 6) {
-            throw new IllegalArgumentException("MAC address constructor argument does not have 6 bytes");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "MAC address constructor argument does not have 6 bytes");
         }
         this.address = new int[6];
 
         for (int i = 0; i < 6; i++) {
             int element = address[i];
             if (element < 0 || element > 255) {
-                throw new IllegalArgumentException("MAC address bytes must be between 0 and 255: " + element);
+                Logger.getInstance().log(LogSeverity.CRITICAL,
+                        "MAC address bytes must be between 0 and 255: " + element);
             }
             this.address[i] = element;
         }
 
-        if(!MacAddressContainer.getInstance().addMacAddress(this)) {
-            throw new IllegalStateException("Address already in MAC address container: " + this);
+        if (checkExisting && !MacAddressContainer.getInstance().addMacAddress(this)) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Address already in MAC address container: " + this);
         }
     }
 
     /**
      * MAC address constructor using string
      * 
-     * @param address The address to use, must use format XX:XX:XX:XX:XX:XX
+     * @param address       The address to use, must use format XX:XX:XX:XX:XX:XX
+     * @param checkExisting Check if address already exists in simulation
      */
-    public MacAddress(String address) {
+    public MacAddress(String address, boolean checkExisting) {
         String[] elements = address.split(":");
         if (elements.length != 6) {
-            throw new IllegalArgumentException("MAC address constructor argument does not have 6 bytes: " + address);
+            Logger.getInstance().log(LogSeverity.CRITICAL, "MAC address constructor argument does not have 6 bytes");
         }
         this.address = new int[6];
 
         for (int i = 0; i < 6; i++) {
             int element = Integer.parseInt(elements[i], 16);
             if (element < 0 || element > 255) {
-                throw new IllegalArgumentException("MAC address bytes must be between 0 and 255: " + element);
+                Logger.getInstance().log(LogSeverity.CRITICAL,
+                        "MAC address bytes must be between 0 and 255: " + element);
             }
             this.address[i] = element;
         }
 
-        if(!MacAddressContainer.getInstance().addMacAddress(this)) {
-            throw new IllegalStateException("Address already in MAC address container: " + this);
+        if (!MacAddressContainer.getInstance().addMacAddress(this) && checkExisting) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Address already in MAC address container: " + this);
         }
     }
 
@@ -116,7 +123,7 @@ public class MacAddress implements Comparable<MacAddress> {
     @Override
     public int compareTo(MacAddress other) {
         for (int i = 0; i < 6; i++) {
-            if(this.address[i] != other.address[i]) {
+            if (this.address[i] != other.address[i]) {
                 return this.address[i] - other.address[i];
             }
         }

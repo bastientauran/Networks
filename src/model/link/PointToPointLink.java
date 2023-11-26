@@ -3,6 +3,8 @@ package model.link;
 import model.io.Layer;
 import model.io.PacketEvent;
 import model.io.PacketTracer;
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.Packet;
 import model.node.Interface;
 import model.simulator.Schedulable;
@@ -71,7 +73,7 @@ public class PointToPointLink extends Link implements Schedulable {
 
     public void attachInterface(Interface interf) {
         if (this.interfacesConnected >= PointToPointLink.NB_INTERFACES) {
-            throw new IllegalStateException("Too many interfaces connected to this link");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Too many interfaces connected to this link");
         }
         this.directions[this.interfacesConnected].src = interf;
         this.interfacesConnected++;
@@ -93,7 +95,8 @@ public class PointToPointLink extends Link implements Schedulable {
     @Override
     public void startTx(Packet packet, Interface src) {
         if (this.interfacesConnected != 2) {
-            throw new IllegalStateException("Point to point link does not have both itnterfaces connected");
+            Logger.getInstance().log(LogSeverity.CRITICAL,
+                    "Point to point link does not have both interfaces connected");
         }
 
         PacketTracer.getInstance().tracePacket(src.getNode().getNodeId(), Layer.PHYSICAL, PacketEvent.SEND, packet);
@@ -103,7 +106,7 @@ public class PointToPointLink extends Link implements Schedulable {
         Time transmissionDelay = this.getTransmissionDelay(packet);
 
         if (this.directions[direction].isTransmitting) {
-            throw new IllegalStateException("Cannot start TX while a packet is already being transmitted");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot start TX while a packet is already being transmitted");
         }
         this.directions[direction].isTransmitting = true;
 
@@ -146,7 +149,8 @@ public class PointToPointLink extends Link implements Schedulable {
      * @param direction The direction of the link used
      */
     public void endRx(Packet packet, int direction) {
-        PacketTracer.getInstance().tracePacket(this.directions[direction].dst.getNode().getNodeId(), Layer.PHYSICAL, PacketEvent.RECEIVE, packet);
+        PacketTracer.getInstance().tracePacket(this.directions[direction].dst.getNode().getNodeId(), Layer.PHYSICAL,
+                PacketEvent.RECEIVE, packet);
 
         this.directions[direction].dst.endRx(packet);
     }
@@ -220,7 +224,7 @@ public class PointToPointLink extends Link implements Schedulable {
                 break;
             }
             default: {
-                throw new IllegalArgumentException("Unknow method for class PointToPointLink: " + method);
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Unknow method for class PointToPointLink: " + method);
             }
         }
     }

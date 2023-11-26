@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import model.network.IpAddress;
 
-public class IpAddressTest {
+public class IpAddressTest extends GenericTest {
 
    @Test
    public void testEmptyConstructor() {
@@ -106,39 +106,39 @@ public class IpAddressTest {
       assertEquals(new IpAddress("192.168.101.0/16"), address.getNextAddress());
 
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress("192.168.100.255/24").getNextAddress());
 
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress("255.255.255.255/0").getNextAddress());
    }
 
    @Test
    public void testIncorrectValue() {
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress(new int[] { 192, 300, 0, 1 }, 14));
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress(new int[] { 192, -8, 0, 1 }, 19));
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress(new int[] { 192, 168, 0, 1 }, -2));
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress(new int[] { 192, 168, 0, 1 }, 35));
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress("192.168.0.4/50"));
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress("192.280.0.4/24"));
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress("192.-1.0.4/24"));
       assertThrows(
-            IllegalArgumentException.class,
+            RuntimeException.class,
             () -> new IpAddress("something"));
    }
 }

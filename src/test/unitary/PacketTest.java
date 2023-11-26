@@ -13,7 +13,7 @@ import model.network.MacAddress;
 import model.network.MacHeader;
 import model.network.Packet;
 
-public class PacketTest {
+public class PacketTest extends GenericTest {
 
    @Test
    public void testEmptyConstructor() {
@@ -59,7 +59,8 @@ public class PacketTest {
       sol += "[payload='dummy payload', payloadSize=1500, totalSize=1508]";
       assertEquals(sol, packet.toString());
 
-      MacHeader macHeader = new MacHeader(new MacAddress("00:11:22:33:44:55"), new MacAddress("AA:BB:CC:DD:EE:FF"));
+      MacHeader macHeader = new MacHeader(new MacAddress("00:11:22:33:44:55", true),
+            new MacAddress("AA:BB:CC:DD:EE:FF", true));
       packet.addHeader(macHeader);
       assertEquals(1500, packet.getPayloadSizeBytes());
       assertEquals(1520, packet.getTotalSizeBytes());

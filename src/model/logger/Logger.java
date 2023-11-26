@@ -84,7 +84,6 @@ public class Logger {
      * @param message     Optional message to add
      */
     public void log(LogSeverity logSeverity, String message) {
-        System.out.println("log " + logSeverity + " " + minSeverityLevel);
         if (!this.enableLog || logSeverity.compareTo(minSeverityLevel) < 0) {
             return;
         }
@@ -103,10 +102,7 @@ public class Logger {
 
         if (logSeverity == LogSeverity.CRITICAL) {
             System.out.println("Critical error encoutered, stopping simulation with stack trace:");
-            for (int i = 1; i < stes.length; i++) {
-                System.out.println("    " + stes[i]);
-            }
-            System.exit(1);
+            throw new NetworksCriticalException();
         }
     }
 }

@@ -1,5 +1,8 @@
 package model.simulator;
 
+import model.logger.LogSeverity;
+import model.logger.Logger;
+
 /**
  * Class representing Time
  * 
@@ -40,13 +43,13 @@ public class Time implements Comparable<Time> {
      */
     public Time(int seconds, int nanoSeconds) {
         if (seconds < 0) {
-            throw new IllegalArgumentException("Number of seconds must be positive or null");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Number of seconds must be positive or null");
         }
         if (nanoSeconds < 0) {
-            throw new IllegalArgumentException("Number of nanoseconds must be positive or null");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Number of nanoseconds must be positive or null");
         }
         if (nanoSeconds >= Time.NANOSECONDS_IN_SECOND) {
-            throw new IllegalArgumentException("Number of nanoseconds must be strictly lower than 1 billion");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Number of nanoseconds must be strictly lower than 1 billion");
         }
         this.seconds = seconds;
         this.nanoSeconds = nanoSeconds;
@@ -101,7 +104,7 @@ public class Time implements Comparable<Time> {
         ;
 
         if (time.seconds < 0) {
-            throw new IllegalStateException("Time cannot be negative");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Time cannot be negative");
         }
 
         return time;

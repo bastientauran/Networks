@@ -32,7 +32,12 @@ import model.utils.Pair;
  * @version 1.0
  */
 public class PointToPointExample {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        Logger.getInstance().enableLogger();
+        Logger.getInstance().setMinSveritylevel(LogSeverity.INFO);
+
+        Logger.getInstance().log(LogSeverity.INFO, "Launch PointToPointExample");
+
         EndDevice nodeSrc = new EndDevice("src");
         EndDevice nodeDst = new EndDevice("dst");
 
@@ -58,9 +63,6 @@ public class PointToPointExample {
             Simulator.getInstance().schedule(new Time(), nodeSrc, SchedulableMethod.END_DEVICE__SEND, packet,
                     interfaceDst.getIpAddress());
         }
-
-        Logger.getInstance().enableLogger();
-        Logger.getInstance().setMinSveritylevel(LogSeverity.INFO);
 
         Simulator.getInstance().run();
     }

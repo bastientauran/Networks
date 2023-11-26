@@ -7,7 +7,7 @@ import org.junit.Test;
 import model.network.IpAddress;
 import model.network.IpHeader;
 
-public class IpHeaderTest {
+public class IpHeaderTest extends GenericTest {
 
    @Test
    public void testEmptyConstructor() {

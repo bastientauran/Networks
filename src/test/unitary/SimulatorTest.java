@@ -11,7 +11,7 @@ import model.simulator.SchedulableMethod;
 import model.simulator.Simulator;
 import model.simulator.Time;
 
-public class SimulatorTest {
+public class SimulatorTest extends GenericTest {
 
     private class DummyMethods implements Schedulable {
 
@@ -99,11 +99,11 @@ public class SimulatorTest {
         Simulator.getInstance().setStopTime(new Time(10, 0));
 
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> Simulator.getInstance().schedule(new Time(5, 0), d, SchedulableMethod.DUMMY_CLASS__METHOD_1,
                         1.5));
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> Simulator.getInstance().schedule(new Time(1, 0), d, SchedulableMethod.DUMMY_CLASS__METHOD_2,
                         "test",
                         new MacAddress()));

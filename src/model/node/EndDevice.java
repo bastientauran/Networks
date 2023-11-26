@@ -3,6 +3,8 @@ package model.node;
 import model.io.Layer;
 import model.io.PacketEvent;
 import model.io.PacketTracer;
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.Header;
 import model.network.HeaderType;
 import model.network.IpAddress;
@@ -35,7 +37,7 @@ public class EndDevice extends Node implements Schedulable {
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() == HeaderType.IP_HEADER) {
-                throw new IllegalStateException("Packet cannot already have IP header");
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Packet cannot already have IP header");
             }
         }
 
@@ -44,7 +46,8 @@ public class EndDevice extends Node implements Schedulable {
             IpAddress addressSrc = routingEntry.first.getIpAddress();
 
             if (addressSrc == null) {
-                throw new IllegalArgumentException("Source IP address not set");
+                Logger.getInstance().log(LogSeverity.ERROR, "Source IP address not set");
+                return;
             }
 
             IpHeader ipHeader = new IpHeader(addressSrc, addressDst);
@@ -54,7 +57,8 @@ public class EndDevice extends Node implements Schedulable {
 
             routingEntry.first.enque(packet, routingEntry.second);
         } else {
-            System.out.println("No route to destination, dropping packet");
+            PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.DROP, packet);
+            Logger.getInstance().log(LogSeverity.WARNING, "No route to destination, dropping packet");
         }
     }
 
@@ -66,7 +70,7 @@ public class EndDevice extends Node implements Schedulable {
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() != HeaderType.IP_HEADER) {
-                throw new IllegalStateException("Packet does not have an IP header");
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Packet does not have an IP header");
             }
         }
         IpHeader header = (IpHeader) currentHeader;
@@ -85,7 +89,7 @@ public class EndDevice extends Node implements Schedulable {
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() != HeaderType.IP_HEADER) {
-                throw new IllegalStateException("Packet does not have an IP header");
+                // CRITICAL ERROR
             }
         }
 
@@ -106,7 +110,7 @@ public class EndDevice extends Node implements Schedulable {
                 break;
             }
             default: {
-                throw new IllegalArgumentException("Unknow method for class EndDevice: " + method);
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Unknow method for class EndDevice: " + method);
             }
         }
     }

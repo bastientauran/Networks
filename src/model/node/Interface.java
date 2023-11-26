@@ -6,6 +6,8 @@ import model.io.Layer;
 import model.io.PacketEvent;
 import model.io.PacketTracer;
 import model.link.Link;
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.Header;
 import model.network.HeaderType;
 import model.network.IpAddress;
@@ -101,14 +103,14 @@ public class Interface {
         MacAddress dstMacAddress = arpTable.getEntry(nextHop);
 
         if (dstMacAddress == null) {
-            System.out.println("Do not know destination MAC address, dropping packet");
+            Logger.getInstance().log(LogSeverity.WARNING, "Do not know destination MAC address, dropping packet");
             return false;
         }
 
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() == HeaderType.MAC_HEADER) {
-                throw new IllegalStateException("Packet cannot already have MAC header");
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Packet cannot already have MAC header");
             }
         }
 
@@ -121,6 +123,7 @@ public class Interface {
         }
 
         if (this.queue.size() == this.queueSizeMaxPackets) {
+            Logger.getInstance().log(LogSeverity.WARNING, "Queue full, dropping packet");
             PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.DROP, packet);
             return false;
         }
@@ -155,7 +158,7 @@ public class Interface {
      */
     public void startTx(Packet packet) {
         if (this.isSending == true) {
-            throw new IllegalStateException("Cannot send a packet while another is already being sent");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot send a packet while another is already being sent");
         }
         this.isSending = true;
 
@@ -185,7 +188,7 @@ public class Interface {
      */
     public void startRx(Packet packet) {
         if (this.isReceiving == true) {
-            throw new IllegalStateException("Cannot receive a packet while another is already being received");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot receive a packet while another is already being received");
         }
         this.isReceiving = true;
     }
@@ -244,7 +247,7 @@ public class Interface {
      */
     public void setQueueSizeMaxPackets(int queueSizeMaxPackets) {
         if (queueSizeMaxPackets < 1) {
-            throw new IllegalArgumentException("Queue size must be positive");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Queue size must be strictly positive");
         }
         this.queueSizeMaxPackets = queueSizeMaxPackets;
     }
