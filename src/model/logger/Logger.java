@@ -1,5 +1,9 @@
 package model.logger;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import model.simulator.Simulator;
 
 /**
@@ -22,6 +26,11 @@ public class Logger {
     private boolean enableLog;
 
     /**
+     * Instance writing logs to file
+     */
+    private PrintWriter writer;
+
+    /**
      * Minimum severity level to record
      */
     private LogSeverity minSeverityLevel;
@@ -31,6 +40,7 @@ public class Logger {
      */
     private Logger() {
         this.enableLog = false;
+        this.writer = null;
         this.minSeverityLevel = LogSeverity.WARNING;
     }
 
@@ -50,6 +60,9 @@ public class Logger {
      * Destroy the instance of Logger
      */
     public static void destroy() {
+        if (instance.writer != null) {
+            instance.writer.close();
+        }
         instance = null;
     }
 
@@ -65,6 +78,29 @@ public class Logger {
      */
     public void disableLogger() {
         this.enableLog = false;
+        if (this.writer != null) {
+            this.writer.close();
+        }
+    }
+
+    /**
+     * Set the path to where the trace will be printed
+     * 
+     * @param path Output path. If empty, print to the console
+     */
+    public void setOutputPath(String path) {
+        try {
+            this.writer = new PrintWriter(new FileWriter(path));
+        } catch (IOException e) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot open " + path + " for log");
+        }
+    }
+
+    /**
+     * Print this trace in the console instead of a file
+     */
+    public void printToConsole() {
+        this.writer = null;
     }
 
     /**
@@ -72,7 +108,7 @@ public class Logger {
      * 
      * @param minSeverityLevel Minimum severity level
      */
-    public void setMinSveritylevel(LogSeverity minSeverityLevel) {
+    public void setMinSeveritylevel(LogSeverity minSeverityLevel) {
         this.minSeverityLevel = minSeverityLevel;
     }
 
@@ -98,7 +134,11 @@ public class Logger {
         output += "[" + ste.getClassName() + "." + ste.getMethodName() + ":" + ste.getLineNumber() + "] ";
         output += message;
 
-        System.out.println(output);
+        if (this.writer != null) {
+            this.writer.write(output + "\n");
+        } else {
+            System.out.println(output);
+        }
 
         if (logSeverity == LogSeverity.CRITICAL) {
             System.out.println("Critical error encoutered, stopping simulation with stack trace:");

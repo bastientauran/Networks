@@ -34,7 +34,8 @@ import model.utils.Pair;
 public class PointToPointExample {
     public static void main(String[] args) {
         Logger.getInstance().enableLogger();
-        Logger.getInstance().setMinSveritylevel(LogSeverity.INFO);
+        Logger.getInstance().setOutputPath("out/simulation/PointToPointExample/log.txt");
+        Logger.getInstance().setMinSeveritylevel(LogSeverity.INFO);
 
         Logger.getInstance().log(LogSeverity.INFO, "Launch PointToPointExample");
 
