@@ -34,6 +34,8 @@ public class EndDevice extends Node implements Schedulable {
 
     @Override
     public void send(Packet packet, IpAddress addressDst) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Send packet " + packet.getPacketId() + " to " + addressDst);
+
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() == HeaderType.IP_HEADER) {
@@ -64,6 +66,7 @@ public class EndDevice extends Node implements Schedulable {
 
     @Override
     public void receive(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Receive packet " + packet.getPacketId());
 
         PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.RECEIVE, packet);
 
@@ -85,22 +88,25 @@ public class EndDevice extends Node implements Schedulable {
     }
 
     // Only for routers
-    /*public void forward(Packet packet) {
-        Header currentHeader = packet.peekHeader();
-        if (currentHeader != null) {
-            if (currentHeader.getType() != HeaderType.IP_HEADER) {
-                // CRITICAL ERROR
-            }
-        }
-
-        IpHeader header = (IpHeader) currentHeader;
-        Pair<Interface, IpAddress> routingEntry = this.routingTable.getEntry(header.getDestination());
-        if (routingEntry != null) {
-            routingEntry.first.enque(packet, routingEntry.second);
-        } else {
-            System.out.println("No route to destination, dropping packet");
-        }
-    }*/
+    /*
+     * public void forward(Packet packet) {
+     * Header currentHeader = packet.peekHeader();
+     * if (currentHeader != null) {
+     * if (currentHeader.getType() != HeaderType.IP_HEADER) {
+     * // CRITICAL ERROR
+     * }
+     * }
+     * 
+     * IpHeader header = (IpHeader) currentHeader;
+     * Pair<Interface, IpAddress> routingEntry =
+     * this.routingTable.getEntry(header.getDestination());
+     * if (routingEntry != null) {
+     * routingEntry.first.enque(packet, routingEntry.second);
+     * } else {
+     * System.out.println("No route to destination, dropping packet");
+     * }
+     * }
+     */
 
     @Override
     public void run(SchedulableMethod method, Object[] arguments) {

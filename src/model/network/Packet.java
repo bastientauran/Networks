@@ -135,6 +135,15 @@ public class Packet {
         return this.payload;
     }
 
+    /**
+     * Get packet ID
+     * 
+     * @return Packet ID
+     */
+    public int getPacketId() {
+        return this.packetId;
+    }
+
     @Override
     public String toString() {
         String str = "Packet: ";

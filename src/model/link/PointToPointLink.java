@@ -94,6 +94,8 @@ public class PointToPointLink extends Link implements Schedulable {
      */
     @Override
     public void startTx(Packet packet, Interface src) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Start TX packet " + packet.getPacketId());
+
         if (this.interfacesConnected != 2) {
             Logger.getInstance().log(LogSeverity.CRITICAL,
                     "Point to point link does not have both interfaces connected");
@@ -109,6 +111,8 @@ public class PointToPointLink extends Link implements Schedulable {
             Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot start TX while a packet is already being transmitted");
         }
         this.directions[direction].isTransmitting = true;
+        
+        Logger.getInstance().log(LogSeverity.DEBUG, "Transmission delay is " + transmissionDelay);
 
         Simulator.getInstance().schedule(Simulator.getInstance().getCurrentTime().add(transmissionDelay), this,
                 SchedulableMethod.POINT_TO_POINT_LINK__END_TX,
@@ -128,6 +132,8 @@ public class PointToPointLink extends Link implements Schedulable {
      * @param direction The direction of the link used
      */
     public void endTx(Packet packet, int direction) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "End TX packet " + packet.getPacketId());
+
         this.directions[direction].isTransmitting = false;
         this.directions[direction].src.endTx(packet);
     }
@@ -139,6 +145,8 @@ public class PointToPointLink extends Link implements Schedulable {
      * @param direction The direction of the link used
      */
     public void startRx(Packet packet, int direction) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Start RX packet " + packet.getPacketId());
+
         this.directions[direction].dst.startRx(packet);
     }
 
@@ -149,6 +157,8 @@ public class PointToPointLink extends Link implements Schedulable {
      * @param direction The direction of the link used
      */
     public void endRx(Packet packet, int direction) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "End RX packet " + packet.getPacketId());
+
         PacketTracer.getInstance().tracePacket(this.directions[direction].dst.getNode().getNodeId(), Layer.PHYSICAL,
                 PacketEvent.RECEIVE, packet);
 

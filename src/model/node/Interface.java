@@ -99,6 +99,9 @@ public class Interface {
      * @return True if the packet has been added, False otherwise
      */
     public boolean enque(Packet packet, IpAddress nextHop) {
+        Logger.getInstance().log(LogSeverity.DEBUG,
+                "Enque packet " + packet.getPacketId() + ". Will be sent to " + nextHop);
+
         ArpTable arpTable = this.node.getArpTable();
         MacAddress dstMacAddress = arpTable.getEntry(nextHop);
 
@@ -141,6 +144,7 @@ public class Interface {
      * @param packet The packet received
      */
     public void receive(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Receive packet " + packet.getPacketId());
 
         PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.RECEIVE, packet);
 
@@ -157,6 +161,8 @@ public class Interface {
      * @param packet The packet to send
      */
     public void startTx(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Start TX packet " + packet.getPacketId());
+
         if (this.isSending == true) {
             Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot send a packet while another is already being sent");
         }
@@ -173,6 +179,8 @@ public class Interface {
      * @param packet The packet sent
      */
     public void endTx(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "End TX packet " + packet.getPacketId());
+
         this.isSending = false;
 
         if (!this.queue.isEmpty()) {
@@ -187,8 +195,11 @@ public class Interface {
      * @param packet The packet to receive
      */
     public void startRx(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Start RX packet " + packet.getPacketId());
+
         if (this.isReceiving == true) {
-            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot receive a packet while another is already being received");
+            Logger.getInstance().log(LogSeverity.CRITICAL,
+                    "Cannot receive a packet while another is already being received");
         }
         this.isReceiving = true;
     }
@@ -199,6 +210,8 @@ public class Interface {
      * @param packet The packet received
      */
     public void endRx(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "End RX packet " + packet.getPacketId());
+
         this.isReceiving = false;
 
         this.receive(packet);
