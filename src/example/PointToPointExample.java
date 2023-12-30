@@ -57,6 +57,7 @@ public class PointToPointExample {
         Simulator.getInstance().reset();
         Simulator.getInstance().setStopTime(new Time(1000, 0));
         Simulator.getInstance().setScenarioName("PointToPointExample");
+        Simulator.getInstance().enableProgressBar();
 
         Packet packet;
         for (int i = 0; i < 5; i++) {

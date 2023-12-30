@@ -49,7 +49,8 @@ public class Time implements Comparable<Time> {
             Logger.getInstance().log(LogSeverity.CRITICAL, "Number of nanoseconds must be positive or null");
         }
         if (nanoSeconds >= Time.NANOSECONDS_IN_SECOND) {
-            Logger.getInstance().log(LogSeverity.CRITICAL, "Number of nanoseconds must be strictly lower than 1 billion");
+            Logger.getInstance().log(LogSeverity.CRITICAL,
+                    "Number of nanoseconds must be strictly lower than 1 billion");
         }
         this.seconds = seconds;
         this.nanoSeconds = nanoSeconds;
@@ -108,6 +109,15 @@ public class Time implements Comparable<Time> {
         }
 
         return time;
+    }
+
+    /**
+     * Get number of seconds in this instance. Includes fraction of second
+     * 
+     * @return The number of seconds
+     */
+    public double getSeconds() {
+        return this.seconds + this.nanoSeconds / 1000000000.0;
     }
 
     @Override

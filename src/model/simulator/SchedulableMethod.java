@@ -14,6 +14,7 @@ import model.network.Packet;
 public enum SchedulableMethod {
     DUMMY_CLASS__METHOD_1("DummyClass", "method1", new Class<?>[] { Integer.class }),
     DUMMY_CLASS__METHOD_2("DummyClass", "method2", new Class<?>[] { String.class, Time.class }),
+    SIMULATOR__PRINT_PROGRESS_BAR("Simulator", "printProgressBar", new Class<?>[] {}),
     POINT_TO_POINT_LINK__END_TX("PointToPointLink", "endTx", new Class<?>[] { Packet.class, Integer.class }),
     POINT_TO_POINT_LINK__START_RX("PointToPointLink", "startRx", new Class<?>[] { Packet.class, Integer.class }),
     POINT_TO_POINT_LINK__END_RX("PointToPointLink", "endRx", new Class<?>[] { Packet.class, Integer.class }),

@@ -15,7 +15,7 @@ import model.logger.Logger;
  * @see Event
  * @see SchedulableMethod
  */
-public class Simulator {
+public class Simulator implements Schedulable {
 
     /**
      * Instance of Simulator
@@ -36,6 +36,16 @@ public class Simulator {
      * Time where the simulation will be stopped
      */
     private Time stopTime;
+
+    /**
+     * Print progress bar in console if set to true
+     */
+    private boolean enableProgressBar;
+
+    /**
+     * Interval between to prints on the console of progress
+     */
+    private Time progressBarStep;
 
     /**
      * Indicates if the simulation has been launched
@@ -59,6 +69,8 @@ public class Simulator {
         this.scenarioName = "";
         this.currentTime = new Time();
         this.stopTime = new Time();
+        this.enableProgressBar = false;
+        this.progressBarStep = new Time();
         this.running = false;
         this.events = new TreeSet<Event>();
         this.id = 0;
@@ -103,12 +115,35 @@ public class Simulator {
     }
 
     /**
+     * Enable progress bar in simulation
+     */
+    public void enableProgressBar() {
+        this.enableProgressBar = true;
+    }
+
+    /**
+     * Disable progress bar in simulation
+     */
+    public void disableProgressBar() {
+        this.enableProgressBar = false;
+    }
+
+    /**
      * Get current time in simulation
      * 
      * @return Current time
      */
     public Time getCurrentTime() {
         return new Time(this.currentTime);
+    }
+
+    /**
+     * Print progress bar
+     */
+    public void printProgressBar() {
+        System.out.println("Progress: " + this.currentTime.getSeconds() + "/" + this.stopTime.getSeconds());
+
+        schedule(this.currentTime.add(this.progressBarStep), this, SchedulableMethod.SIMULATOR__PRINT_PROGRESS_BAR);
     }
 
     /**
@@ -147,6 +182,20 @@ public class Simulator {
 
         if (this.scenarioName != "") {
             PacketTracer.getInstance().initTrace();
+        }
+
+        if (this.enableProgressBar) {
+            if (this.stopTime.compareTo(new Time(10, 0)) < 0) {
+                this.progressBarStep = new Time(0, 100000000);
+            } else {
+                double seconds = this.stopTime.getSeconds();
+                double step = seconds / 100;
+                int stepSeconds = (int) step;
+                int stepNanoseconds = (int) (1000000000 * (step - stepSeconds));
+                this.progressBarStep = new Time(stepSeconds, stepNanoseconds);
+            }
+
+            schedule(this.progressBarStep, this, SchedulableMethod.SIMULATOR__PRINT_PROGRESS_BAR);
         }
 
         this.running = true;
@@ -219,4 +268,16 @@ public class Simulator {
         this.scenarioName = scenarioName;
     }
 
+    @Override
+    public void run(SchedulableMethod method, Object[] arguments) {
+        switch (method) {
+            case SIMULATOR__PRINT_PROGRESS_BAR: {
+                this.printProgressBar();
+                break;
+            }
+            default: {
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Unknow method for class PointToPointLink: " + method);
+            }
+        }
+    }
 }
