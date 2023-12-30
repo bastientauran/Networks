@@ -14,13 +14,25 @@ import model.network.Packet;
 public enum SchedulableMethod {
     DUMMY_CLASS__METHOD_1("DummyClass", "method1", new Class<?>[] { Integer.class }),
     DUMMY_CLASS__METHOD_2("DummyClass", "method2", new Class<?>[] { String.class, Time.class }),
+    SIMULATOR__PRINT_PROGRESS_BAR("Simulator", "printProgressBar", new Class<?>[] {}),
     POINT_TO_POINT_LINK__END_TX("PointToPointLink", "endTx", new Class<?>[] { Packet.class, Integer.class }),
     POINT_TO_POINT_LINK__START_RX("PointToPointLink", "startRx", new Class<?>[] { Packet.class, Integer.class }),
     POINT_TO_POINT_LINK__END_RX("PointToPointLink", "endRx", new Class<?>[] { Packet.class, Integer.class }),
     END_DEVICE__SEND("EndDevice", "send", new Class<?>[] { Packet.class, IpAddress.class });
 
+    /**
+     * Name of class that launch this method
+     */
     private String className;
+
+    /**
+     * The name of the method
+     */
     private String methodName;
+
+    /**
+     * Array containing all the argument types needed by this method
+     */
     private Class<?>[] argumentTypes;
 
     /**

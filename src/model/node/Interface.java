@@ -2,7 +2,12 @@ package model.node;
 
 import java.util.LinkedList;
 
+import model.io.Layer;
+import model.io.PacketEvent;
+import model.io.PacketTracer;
 import model.link.Link;
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.Header;
 import model.network.HeaderType;
 import model.network.IpAddress;
@@ -94,18 +99,21 @@ public class Interface {
      * @return True if the packet has been added, False otherwise
      */
     public boolean enque(Packet packet, IpAddress nextHop) {
+        Logger.getInstance().log(LogSeverity.DEBUG,
+                "Enque packet " + packet.getPacketId() + ". Will be sent to " + nextHop);
+
         ArpTable arpTable = this.node.getArpTable();
         MacAddress dstMacAddress = arpTable.getEntry(nextHop);
 
         if (dstMacAddress == null) {
-            System.out.println("Do not know destination MAC address, dropping packet");
+            Logger.getInstance().log(LogSeverity.WARNING, "Do not know destination MAC address, dropping packet");
             return false;
         }
 
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() == HeaderType.MAC_HEADER) {
-                throw new IllegalStateException("Packet cannot already have MAC header");
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Packet cannot already have MAC header");
             }
         }
 
@@ -118,8 +126,12 @@ public class Interface {
         }
 
         if (this.queue.size() == this.queueSizeMaxPackets) {
+            Logger.getInstance().log(LogSeverity.WARNING, "Queue full, dropping packet");
+            PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.DROP, packet);
             return false;
         }
+
+        PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.ENQUE, packet);
         this.queue.add(packet);
 
         return true;
@@ -132,10 +144,13 @@ public class Interface {
      * @param packet The packet received
      */
     public void receive(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Receive packet " + packet.getPacketId());
+
+        PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.RECEIVE, packet);
 
         MacHeader macHeader = (MacHeader) packet.popHeader();
 
-        if (macHeader.getDestination() == this.macAddress) {
+        if (macHeader.getDestination().equals(this.macAddress)) {
             this.node.receive(packet);
         }
     }
@@ -146,10 +161,14 @@ public class Interface {
      * @param packet The packet to send
      */
     public void startTx(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Start TX packet " + packet.getPacketId());
+
         if (this.isSending == true) {
-            throw new IllegalStateException("Cannot send a packet while another is already being sent");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot send a packet while another is already being sent");
         }
         this.isSending = true;
+
+        PacketTracer.getInstance().tracePacket(this.node.getNodeId(), Layer.MAC, PacketEvent.SEND, packet);
 
         this.link.startTx(packet, this);
     }
@@ -160,6 +179,8 @@ public class Interface {
      * @param packet The packet sent
      */
     public void endTx(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "End TX packet " + packet.getPacketId());
+
         this.isSending = false;
 
         if (!this.queue.isEmpty()) {
@@ -174,8 +195,11 @@ public class Interface {
      * @param packet The packet to receive
      */
     public void startRx(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Start RX packet " + packet.getPacketId());
+
         if (this.isReceiving == true) {
-            throw new IllegalStateException("Cannot receive a packet while another is already being received");
+            Logger.getInstance().log(LogSeverity.CRITICAL,
+                    "Cannot receive a packet while another is already being received");
         }
         this.isReceiving = true;
     }
@@ -186,6 +210,8 @@ public class Interface {
      * @param packet The packet received
      */
     public void endRx(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "End RX packet " + packet.getPacketId());
+
         this.isReceiving = false;
 
         this.receive(packet);
@@ -219,13 +245,22 @@ public class Interface {
     }
 
     /**
+     * Get Node associated to this interface
+     * 
+     * @return The node associated to this interface
+     */
+    public Node getNode() {
+        return this.node;
+    }
+
+    /**
      * Set the maximum size of the queue
      * 
      * @param queueSizeMaxPackets The maximum size of queue to set
      */
     public void setQueueSizeMaxPackets(int queueSizeMaxPackets) {
         if (queueSizeMaxPackets < 1) {
-            throw new IllegalArgumentException("Queue size must be positive");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Queue size must be strictly positive");
         }
         this.queueSizeMaxPackets = queueSizeMaxPackets;
     }

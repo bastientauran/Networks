@@ -1,11 +1,13 @@
 package helper;
 
 import model.link.PointToPointLink;
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.IpAddress;
 import model.node.Interface;
 import model.node.Node;
 import model.simulator.Time;
-import utils.Pair;
+import model.utils.Pair;
 
 /**
  * Helper used to build a new point to Point link
@@ -37,7 +39,7 @@ public class PointToPointHelper {
     /**
      * Constructor witrh custom attribute values
      * 
-     * @param bandwidthBytesPerSecond The bandwith of link in bytes per sencond
+     * @param bandwidthBytesPerSecond The bandwith of link in bytes per second
      * @param delay                   The delay of the link
      */
     public PointToPointHelper(int bandwidthBytesPerSecond, Time delay) {
@@ -54,8 +56,10 @@ public class PointToPointHelper {
      * @return The pair of interfaces created
      */
     public Pair<Interface, Interface> install(Node src, Node dst, IpAddress network) {
+        Logger.getInstance().log(LogSeverity.INFO,
+                "Install point to point between node " + src.getNodeId() + " and " + dst.getNodeId());
         if (network.getMask() > 30) {
-            throw new IllegalArgumentException("Network mask too high, cannot add two different addresses");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Network mask too high, cannot add two different addresses");
         }
 
         PointToPointLink pointToPointLink = new PointToPointLink();
@@ -88,11 +92,13 @@ public class PointToPointHelper {
      * @return The pair of interfaces created
      */
     public Pair<Interface, Interface> install(Node src, Node dst, IpAddress ipAddressSrc, IpAddress ipAddressDst) {
+        Logger.getInstance().log(LogSeverity.INFO,
+                "Install point to point between node " + src.getNodeId() + " and " + dst.getNodeId());
         if (!ipAddressSrc.isInNetwork(ipAddressDst)) {
-            throw new IllegalArgumentException("Source IP address is not in same network than destination");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Source IP address is not in same network than destination");
         }
         if (!ipAddressDst.isInNetwork(ipAddressSrc)) {
-            throw new IllegalArgumentException("Source IP address is not in same network than destination");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Source IP address is not in same network than destination");
         }
 
         PointToPointLink pointToPointLink = new PointToPointLink();

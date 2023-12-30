@@ -14,7 +14,7 @@ import model.network.IpAddress;
 import model.node.Interface;
 import model.node.RoutingTable;
 
-public class RoutingTest {
+public class RoutingTest extends GenericTest {
 
     @Test
     public void testWrongEntry() {
@@ -24,7 +24,7 @@ public class RoutingTest {
         IpAddress nextHop = new IpAddress("192.168.1.0/24");
 
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> table.addEntry(ipAddress, i, nextHop));
     }
 
@@ -38,7 +38,7 @@ public class RoutingTest {
         table.addEntry(ipAddress, i, nextHop);
         assertTrue(table.hasEntry(ipAddress));
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> table.addEntry(ipAddress, i, nextHop));
         assertTrue(table.hasEntry(ipAddress));
         assertTrue(table.hasEntry(new IpAddress("192.168.100.0/24")));
@@ -57,7 +57,7 @@ public class RoutingTest {
         IpAddress nextHop2 = new IpAddress("192.168.2.1/32");
 
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> table.updateEntry(ipAddress, i, nextHop));
 
         assertFalse(table.hasEntry(ipAddress));

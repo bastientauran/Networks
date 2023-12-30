@@ -2,9 +2,12 @@ package model.network;
 
 import java.util.Stack;
 
+import model.utils.IdGenerator;
+
 /**
  * Class representing a packet.
- * It is represented by a payload (with a size and an optional String representation),
+ * It is represented by a payload (with a size and an optional String
+ * representation),
  * and headers, using a LIFO rule.
  * 
  * @author Bastien Tauran
@@ -12,6 +15,11 @@ import java.util.Stack;
  * @see Header
  */
 public class Packet {
+
+    /**
+     * ID of the packet, generated automatically
+     */
+    protected int packetId;
 
     /**
      * Payload of the packet
@@ -32,6 +40,7 @@ public class Packet {
      * Default constructor
      */
     public Packet() {
+        this.packetId = IdGenerator.getInstance().getNextPacketId();
         this.payload = "";
         this.payloadSizeBytes = 0;
         this.headers = new Stack<Header>();
@@ -43,6 +52,7 @@ public class Packet {
      * @param payloadSizeBytes The packet payload size in bytes
      */
     public Packet(int payloadSizeBytes) {
+        this.packetId = IdGenerator.getInstance().getNextPacketId();
         this.payload = "";
         this.payloadSizeBytes = payloadSizeBytes;
         this.headers = new Stack<Header>();
@@ -55,6 +65,7 @@ public class Packet {
      * @param payloadSizeBytes The packet payload size in bytes
      */
     public Packet(String payload, int payloadSizeBytes) {
+        this.packetId = IdGenerator.getInstance().getNextPacketId();
         this.payload = payload;
         this.payloadSizeBytes = payloadSizeBytes;
         this.headers = new Stack<Header>();
@@ -124,14 +135,44 @@ public class Packet {
         return this.payload;
     }
 
+    /**
+     * Get packet ID
+     * 
+     * @return Packet ID
+     */
+    public int getPacketId() {
+        return this.packetId;
+    }
 
     @Override
     public String toString() {
         String str = "Packet: ";
-        for(int i = this.headers.size() - 1; i >= 0; i--) {
+        for (int i = this.headers.size() - 1; i >= 0; i--) {
             str += this.headers.elementAt(i);
         }
-        str += "[payload='" + this.payload + "', payloadSize=" + this.payloadSizeBytes + ", totalSize=" + this.getTotalSizeBytes() + "]";
+        str += "[payload='" + this.payload + "', payloadSize=" + this.payloadSizeBytes + ", totalSize="
+                + this.getTotalSizeBytes() + "]";
         return str;
+    }
+
+    /**
+     * Format headers and payload to be printed in a trace file
+     * 
+     * @return String representation of the packet to trace
+     */
+    public String formatToTrace() {
+        String[] output = new String[this.headers.size() + 1];
+        int i = 0;
+        for (Header e : this.headers) {
+            output[i] = e.formatToTrace();
+            i++;
+        }
+        if (this.payload != "") {
+            output[this.headers.size()] = this.payload;
+        } else {
+            output[this.headers.size()] = "NoPayload";
+        }
+
+        return this.packetId + " " + String.join(" ", output);
     }
 }

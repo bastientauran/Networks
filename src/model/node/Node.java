@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import model.network.IpAddress;
 import model.network.Packet;
+import model.utils.IdGenerator;
 
 /**
  * Abstract class representing a node
@@ -13,6 +14,11 @@ import model.network.Packet;
  * @see Interface
  */
 public abstract class Node {
+
+    /**
+     * ID of the node, generated automatically
+     */
+    protected int nodeId;
 
     /**
      * Name of the node
@@ -40,6 +46,7 @@ public abstract class Node {
      * @param name Name of this node
      */
     public Node(String name) {
+        this.nodeId = IdGenerator.getInstance().getNextNodeId();
         this.name = name;
         this.interfaces = new ArrayList<Interface>();
         this.arpTable = new ArpTable();
@@ -63,20 +70,21 @@ public abstract class Node {
     public abstract void receive(Packet packet);
 
     /**
-     * Forward a new Packet to the next interface.
-     * This method does not add an IP header
-     * 
-     * @param packet The packet to forward
-     */
-    public abstract void forward(Packet packet);
-
-    /**
      * Add a new interface to this node
      * 
      * @param interf The interface to add
      */
     public void addInterface(Interface interf) {
         this.interfaces.add(interf);
+    }
+
+    /**
+     * Get node ID
+     * 
+     * @return Node ID
+     */
+    public int getNodeId() {
+        return this.nodeId;
     }
 
     /**

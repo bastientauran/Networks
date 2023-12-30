@@ -2,6 +2,8 @@ package model.node;
 
 import java.util.TreeMap;
 
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.IpAddress;
 import model.network.MacAddress;
 
@@ -37,10 +39,10 @@ public class ArpTable {
      */
     public void addEntry(IpAddress ipAddress, MacAddress macAddress) {
         if (ipAddress.getMask() != 32) {
-            throw new IllegalArgumentException("IP address mask must be 32, but got " + ipAddress.getMask());
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address mask must be 32, but got " + ipAddress.getMask());
         }
         if (this.table.containsKey(ipAddress)) {
-            throw new IllegalArgumentException("IP adress " + ipAddress + "is already in ARP table");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP adress " + ipAddress + "is already in ARP table");
         }
         this.table.put(ipAddress, macAddress);
     }
@@ -54,10 +56,10 @@ public class ArpTable {
      */
     public void updateEntry(IpAddress ipAddress, MacAddress macAddress) {
         if (ipAddress.getMask() != 32) {
-            throw new IllegalArgumentException("IP address mask must be 32, but got " + ipAddress.getMask());
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address mask must be 32, but got " + ipAddress.getMask());
         }
         if (!this.table.containsKey(ipAddress)) {
-            throw new IllegalArgumentException("IP adress " + ipAddress + "is not in ARP table");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP adress " + ipAddress + "is not in ARP table");
         }
         this.table.put(ipAddress, macAddress);
     }
@@ -69,10 +71,10 @@ public class ArpTable {
      */
     public void deleteEntry(IpAddress ipAddress) {
         if (ipAddress.getMask() != 32) {
-            throw new IllegalArgumentException("IP address mask must be 32, but got " + ipAddress.getMask());
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address mask must be 32, but got " + ipAddress.getMask());
         }
         if (!this.table.containsKey(ipAddress)) {
-            throw new IllegalArgumentException("IP adress " + ipAddress + "is not in ARP table");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP adress " + ipAddress + "is not in ARP table");
         }
         this.table.remove(ipAddress);
     }
@@ -92,7 +94,7 @@ public class ArpTable {
      */
     public MacAddress getEntry(IpAddress ipAddress) {
         if (ipAddress.getMask() != 32) {
-            throw new IllegalArgumentException("IP address mask must be 32, but got " + ipAddress.getMask());
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address mask must be 32, but got " + ipAddress.getMask());
         }
         return this.table.get(ipAddress);
     }
@@ -105,7 +107,7 @@ public class ArpTable {
      */
     public boolean hasEntry(IpAddress ipAddress) {
         if (ipAddress.getMask() != 32) {
-            throw new IllegalArgumentException("IP address mask must be 32, but got " + ipAddress.getMask());
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address mask must be 32, but got " + ipAddress.getMask());
         }
         return this.table.containsKey(ipAddress);
     }

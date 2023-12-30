@@ -2,8 +2,10 @@ package model.node;
 
 import java.util.HashMap;
 
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.IpAddress;
-import utils.Pair;
+import model.utils.Pair;
 
 /**
  * Class representing a routing table.
@@ -38,11 +40,11 @@ public class RoutingTable {
      */
     public void addEntry(IpAddress network, Interface inter, IpAddress nextHop) {
         if (nextHop.getMask() != 32) {
-            throw new IllegalArgumentException("Next hop address mask must be 32, but got " + nextHop.getMask());
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Next hop address mask must be 32, but got " + nextHop.getMask());
         }
         IpAddress net = network.getNetwork();
         if (this.table.containsKey(net)) {
-            throw new IllegalArgumentException("Network " + net + "is already in routing table");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Network " + net + "is already in routing table");
         }
         this.table.put(net, new Pair<Interface, IpAddress>(inter, nextHop));
     }
@@ -57,11 +59,11 @@ public class RoutingTable {
      */
     public void updateEntry(IpAddress network, Interface inter, IpAddress nextHop) {
         if (nextHop.getMask() != 32) {
-            throw new IllegalArgumentException("Next hop address mask must be 32, but got " + nextHop.getMask());
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Next hop address mask must be 32, but got " + nextHop.getMask());
         }
         IpAddress net = network.getNetwork();
         if (!this.table.containsKey(net)) {
-            throw new IllegalArgumentException("Network " + net + "is not in routing table");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Network " + net + "is not in routing table");
         }
         this.table.put(net, new Pair<Interface, IpAddress>(inter, nextHop));
     }
@@ -74,7 +76,7 @@ public class RoutingTable {
     public void deleteEntry(IpAddress network) {
         IpAddress net = network.getNetwork();
         if (!this.table.containsKey(net)) {
-            throw new IllegalArgumentException("Network " + net + "is not in routing table");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Network " + net + "is not in routing table");
         }
         this.table.remove(net);
     }

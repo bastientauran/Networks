@@ -2,6 +2,9 @@ package model.network;
 
 import java.util.Objects;
 
+import model.logger.LogSeverity;
+import model.logger.Logger;
+
 /**
  * This class represents an IP address
  * 
@@ -41,20 +44,20 @@ public class IpAddress implements Comparable<IpAddress> {
      */
     public IpAddress(int[] address, int mask) {
         if (address.length != 4) {
-            throw new IllegalArgumentException("IP address constructor argument does not have 4 bytes");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address constructor argument does not have 4 bytes");
         }
         this.address = new int[4];
 
         for (int i = 0; i < 4; i++) {
             int element = address[i];
             if (element < 0 || element > 255) {
-                throw new IllegalArgumentException("IP address bytes must be between 0 and 255:" + element);
+                Logger.getInstance().log(LogSeverity.CRITICAL, "IP address bytes must be between 0 and 255:" + element);
             }
             this.address[i] = element;
         }
 
         if (mask < 0 || mask > 32) {
-            throw new IllegalArgumentException("IP address mask must be between 0 and 32: " + mask);
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address mask must be between 0 and 32: " + mask);
         }
         this.mask = mask;
     }
@@ -67,7 +70,7 @@ public class IpAddress implements Comparable<IpAddress> {
     public IpAddress(String address) {
         String[] elts = address.split("/");
         if (elts.length > 2) {
-            throw new IllegalArgumentException(
+            Logger.getInstance().log(LogSeverity.CRITICAL,
                     "IP address constructor argument must have an address and optionnally a netmask: " + address);
         }
 
@@ -79,20 +82,20 @@ public class IpAddress implements Comparable<IpAddress> {
         }
 
         if (mask < 0 || mask > 32) {
-            throw new IllegalArgumentException("IP address mask must be between 0 and 32: " + elts[1]);
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address mask must be between 0 and 32: " + mask);
         }
         this.mask = mask;
 
         String[] elements = elts[0].split("\\.");
         if (elements.length != 4) {
-            throw new IllegalArgumentException("IP address constructor argument does not have 4 bytes: " + elts[0]);
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address constructor argument does not have 4 bytes: " + elts[0]);
         }
         this.address = new int[4];
 
         for (int i = 0; i < 4; i++) {
             int element = Integer.parseInt(elements[i]);
             if (element < 0 || element > 255) {
-                throw new IllegalArgumentException("IP address bytes must be between 0 and 255: " + element);
+                Logger.getInstance().log(LogSeverity.CRITICAL, "IP address bytes must be between 0 and 255:" + element);
             }
             this.address[i] = element;
         }
@@ -124,7 +127,7 @@ public class IpAddress implements Comparable<IpAddress> {
         }
 
         if (mask < 0 || mask > 32) {
-            throw new IllegalArgumentException("IP address mask must be between 0 and 32: " + mask);
+            Logger.getInstance().log(LogSeverity.CRITICAL, "IP address mask must be between 0 and 32: " + mask);
         }
         this.mask = mask;
     }
@@ -172,14 +175,15 @@ public class IpAddress implements Comparable<IpAddress> {
             if (next.address[i] != 255) {
                 next.address[i]++;
                 if (!this.getNetwork().equals(next.getNetwork())) {
-                    throw new IllegalArgumentException("Cannot bump address");
+                    Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot bump address");
                 }
                 return next;
             }
             next.address[i] = 0;
         }
 
-        throw new IllegalArgumentException("Cannot bump address");
+        Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot bump address");
+        return null;
     }
 
     /**

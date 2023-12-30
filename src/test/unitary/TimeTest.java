@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import model.simulator.Time;
 
-public class TimeTest {
+public class TimeTest extends GenericTest {
 
     @Test
     public void testEmptyConstructor() {
@@ -21,16 +21,16 @@ public class TimeTest {
         Time time = new Time(10, 50);
         assertEquals("10s50ns", time.toString());
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> new Time(-1, 20));
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> new Time(40, -1556));
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> new Time(40, 1000000000));
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> new Time(40, 1234567890));
     }
 
@@ -57,10 +57,10 @@ public class TimeTest {
         assertTrue(time.remove(new Time(2, 4)).equals(new Time(8, 46)));
         assertTrue(time.remove(new Time(2, 100)).equals(new Time(7, 999999950)));
         assertThrows(
-                IllegalStateException.class,
+                RuntimeException.class,
                 () -> time.remove(new Time(10, 51)));
         assertThrows(
-                IllegalStateException.class,
+                RuntimeException.class,
                 () -> time.remove(new Time(11, 50)));
     }
 }

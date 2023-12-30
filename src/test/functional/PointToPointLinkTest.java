@@ -15,7 +15,7 @@ import model.node.Interface;
 import model.simulator.SchedulableMethod;
 import model.simulator.Simulator;
 import model.simulator.Time;
-import utils.Pair;
+import model.utils.Pair;
 
 public class PointToPointLinkTest {
 

@@ -31,6 +31,13 @@ public abstract class Header {
     public abstract int getSize();
 
     /**
+     * Format header to be printed in a trace file
+     * 
+     * @return String representation of the header to trace
+     */
+    public abstract String formatToTrace();
+
+    /**
      * Get the type of this header
      * 
      * @return The type of the header
