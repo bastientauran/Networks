@@ -158,6 +158,37 @@ public class Time implements Comparable<Time> {
     }
 
     /**
+     * Divide time by a given factor
+     * 
+     * @param divider The factor to use to divide
+     * @return A new instance of Time which is the fraction of current Time
+     */
+    public Time divide(double divider) {
+        if (divider < 0) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot divide Time by negative value");
+        }
+        long seconds = this.seconds + 1000000000 * this.nanoSeconds;
+        seconds /= divider;
+
+        return new Time((int) (seconds / 1000000000), (int) (seconds % 1000000000));
+    }
+
+    /**
+     * Truncate time with a given precision
+     * 
+     * @param precision The presision to use
+     * @return A new instance of Time which is truncated
+     */
+    public Time truncate(Time precision) {
+        long seconds = this.seconds + 1000000000 * this.nanoSeconds;
+        long precisionSeconds = precision.seconds + 1000000000 * precision.nanoSeconds;
+
+        seconds %= precisionSeconds;
+
+        return new Time((int) (seconds / 1000000000), (int) (seconds % 1000000000));
+    }
+
+    /**
      * Get number of seconds in this instance. Includes fraction of second
      * 
      * @return The number of seconds
