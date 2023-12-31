@@ -22,9 +22,29 @@ public class Time implements Comparable<Time> {
     private int nanoSeconds;
 
     /**
+     * Number of nanoseconds in a microsecond
+     */
+    public static final int NANOSECONDS_IN_MICROSECOND = 1000;
+
+    /**
+     * Number of nanoseconds in a millisecond
+     */
+    public static final int NANOSECONDS_IN_MILLISECOND = 1000000;
+
+    /**
      * Number of nanoseconds in a second
      */
     public static final int NANOSECONDS_IN_SECOND = 1000000000;
+
+    /**
+     * Number of microseconds in a second
+     */
+    public static final int MICROSECONDS_IN_SECOND = 1000000;
+
+    /**
+     * Number of milliseconds in a second
+     */
+    public static final int MILLISECONDS_IN_SECOND = 1000;
 
     /**
      * Default constructor.
@@ -42,6 +62,10 @@ public class Time implements Comparable<Time> {
      * @return Time created
      */
     public static Time seconds(int seconds) {
+        if (seconds < 0) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Number of seconds must be positive or null");
+        }
+
         return new Time(seconds, 0);
     }
 
@@ -52,8 +76,12 @@ public class Time implements Comparable<Time> {
      * @return Time created
      */
     public static Time milliSeconds(long milliSeconds) {
-        int seconds = (int) milliSeconds / 1000;
-        int nanoSeconds = (int) (1000000 * (milliSeconds % 1000));
+        if (milliSeconds < 0) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Number of milliseconds must be positive or null");
+        }
+
+        int seconds = (int) (milliSeconds / Time.MILLISECONDS_IN_SECOND);
+        int nanoSeconds = (int) (Time.NANOSECONDS_IN_MILLISECOND * (milliSeconds % Time.MILLISECONDS_IN_SECOND));
         return new Time(seconds, nanoSeconds);
     }
 
@@ -64,8 +92,12 @@ public class Time implements Comparable<Time> {
      * @return Time created
      */
     public static Time microSeconds(long microSeconds) {
-        int seconds = (int) microSeconds / 1000000;
-        int nanoSeconds = (int) (1000 * (microSeconds % 1000000));
+        if (microSeconds < 0) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Number of microseconds must be positive or null");
+        }
+
+        int seconds = (int) (microSeconds / Time.MICROSECONDS_IN_SECOND);
+        int nanoSeconds = (int) (Time.NANOSECONDS_IN_MICROSECOND * (microSeconds % Time.MICROSECONDS_IN_SECOND));
         return new Time(seconds, nanoSeconds);
     }
 
@@ -76,8 +108,12 @@ public class Time implements Comparable<Time> {
      * @return Time created
      */
     public static Time nanoSeconds(long nanoSeconds) {
-        int seconds = (int) nanoSeconds / 1000000000;
-        nanoSeconds = nanoSeconds % 1000000000;
+        if (nanoSeconds < 0) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Number of nanoseconds must be positive or null");
+        }
+
+        int seconds = (int) (nanoSeconds / Time.NANOSECONDS_IN_SECOND);
+        nanoSeconds = nanoSeconds % Time.NANOSECONDS_IN_SECOND;
         return new Time(seconds, (int) nanoSeconds);
     }
 
@@ -167,25 +203,37 @@ public class Time implements Comparable<Time> {
         if (divider < 0) {
             Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot divide Time by negative value");
         }
-        long seconds = this.seconds + 1000000000 * this.nanoSeconds;
-        seconds /= divider;
+        long nanoSeconds = 1L * Time.NANOSECONDS_IN_SECOND * this.seconds + this.nanoSeconds;
+        nanoSeconds /= divider;
 
-        return new Time((int) (seconds / 1000000000), (int) (seconds % 1000000000));
+        return new Time((int) (nanoSeconds / Time.NANOSECONDS_IN_SECOND),
+                (int) (nanoSeconds % Time.NANOSECONDS_IN_SECOND));
     }
 
     /**
      * Truncate time with a given precision
      * 
-     * @param precision The presision to use
+     * @param precision The number of decimal to keep when using second format
      * @return A new instance of Time which is truncated
      */
-    public Time truncate(Time precision) {
-        long seconds = this.seconds + 1000000000 * this.nanoSeconds;
-        long precisionSeconds = precision.seconds + 1000000000 * precision.nanoSeconds;
+    public Time truncate(int precision) {
+        if (precision < 0) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Precision must be positive or null");
+        }
+        if (precision > 9) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Precision cannot be higher than a nanosecond");
+        }
 
-        seconds %= precisionSeconds;
+        precision = 9 - precision;
+        int mask = 1;
+        for (int i = 0; i < precision; i++) {
+            mask *= 10;
+        }
 
-        return new Time((int) (seconds / 1000000000), (int) (seconds % 1000000000));
+        Time time = new Time(this);
+        time.nanoSeconds = ((int) (time.nanoSeconds / mask)) * mask;
+
+        return time;
     }
 
     /**
@@ -194,7 +242,7 @@ public class Time implements Comparable<Time> {
      * @return The number of seconds
      */
     public double getSeconds() {
-        return this.seconds + this.nanoSeconds / 1000000000.0;
+        return this.seconds + this.nanoSeconds / (Time.NANOSECONDS_IN_SECOND * 1.0);
     }
 
     /**
@@ -203,7 +251,8 @@ public class Time implements Comparable<Time> {
      * @return The number of milliseconds
      */
     public double getMilliSeconds() {
-        return this.seconds * 1000 + this.nanoSeconds / 1000000.0;
+        return 1.0 * this.seconds * Time.MILLISECONDS_IN_SECOND
+                + 1.0 * this.nanoSeconds / Time.NANOSECONDS_IN_MILLISECOND;
     }
 
     /**
@@ -212,7 +261,8 @@ public class Time implements Comparable<Time> {
      * @return The number of microseconds
      */
     public double getMicroSeconds() {
-        return this.seconds * 1000000 + this.nanoSeconds / 1000.0;
+        return 1.0 * this.seconds * Time.MICROSECONDS_IN_SECOND
+                + 1.0 * this.nanoSeconds / Time.NANOSECONDS_IN_MICROSECOND;
     }
 
     /**
@@ -221,7 +271,7 @@ public class Time implements Comparable<Time> {
      * @return The number of nanoseconds
      */
     public double getNanoSeconds() {
-        return this.seconds * 1000000000 + this.nanoSeconds;
+        return 1.0 * this.seconds * Time.NANOSECONDS_IN_SECOND + this.nanoSeconds;
     }
 
     @Override
