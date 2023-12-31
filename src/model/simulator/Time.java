@@ -36,6 +36,52 @@ public class Time implements Comparable<Time> {
     }
 
     /**
+     * Create a new instance of Time in seconds
+     * 
+     * @param seconds Number of seconds
+     * @return Time created
+     */
+    public static Time seconds(int seconds) {
+        return new Time(seconds, 0);
+    }
+
+    /**
+     * Create a new instance of Time in milliseconds
+     * 
+     * @param milliSeconds Number of milliseconds
+     * @return Time created
+     */
+    public static Time milliSeconds(long milliSeconds) {
+        int seconds = (int) milliSeconds / 1000;
+        int nanoSeconds = (int) (1000000 * (milliSeconds % 1000));
+        return new Time(seconds, nanoSeconds);
+    }
+
+    /**
+     * Create a new instance of Time in microseconds
+     * 
+     * @param microSeconds Number of microseconds
+     * @return Time created
+     */
+    public static Time microSeconds(long microSeconds) {
+        int seconds = (int) microSeconds / 1000000;
+        int nanoSeconds = (int) (1000 * (microSeconds % 1000000));
+        return new Time(seconds, nanoSeconds);
+    }
+
+    /**
+     * Create a new instance of Time in nanoseconds
+     * 
+     * @param nanoSeconds Number of nanoseconds
+     * @return Time created
+     */
+    public static Time nanoSeconds(long nanoSeconds) {
+        int seconds = (int) nanoSeconds / 1000000000;
+        nanoSeconds = nanoSeconds % 1000000000;
+        return new Time(seconds, (int) nanoSeconds);
+    }
+
+    /**
      * Create an object to desired time
      * 
      * @param seconds     Number of seconds
@@ -118,6 +164,33 @@ public class Time implements Comparable<Time> {
      */
     public double getSeconds() {
         return this.seconds + this.nanoSeconds / 1000000000.0;
+    }
+
+    /**
+     * Get number of milliseconds in this instance. Includes fraction of millisecond
+     * 
+     * @return The number of milliseconds
+     */
+    public double getMilliSeconds() {
+        return this.seconds * 1000 + this.nanoSeconds / 1000000.0;
+    }
+
+    /**
+     * Get number of microseconds in this instance. Includes fraction of microsecond
+     * 
+     * @return The number of microseconds
+     */
+    public double getMicroSeconds() {
+        return this.seconds * 1000000 + this.nanoSeconds / 1000.0;
+    }
+
+    /**
+     * Get number of nanoseconds in this instance
+     * 
+     * @return The number of nanoseconds
+     */
+    public double getNanoSeconds() {
+        return this.seconds * 1000000000 + this.nanoSeconds;
     }
 
     @Override
