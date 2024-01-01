@@ -48,6 +48,15 @@ public class TimeTest extends GenericTest {
         assertEquals(new Time(123456789, 123456789), time);
         time = Time.milliSeconds(987654321);
         assertEquals(new Time(987654, 321000000), time);
+        assertThrows(
+                RuntimeException.class,
+                () -> Time.milliSeconds(-1));
+        assertThrows(
+                RuntimeException.class,
+                () -> Time.microSeconds(-10));
+        assertThrows(
+                RuntimeException.class,
+                () -> Time.nanoSeconds(-100));
     }
 
     @Test
@@ -95,6 +104,12 @@ public class TimeTest extends GenericTest {
         assertEquals(Time.milliSeconds(123456), time.truncate(3));
         assertEquals(Time.seconds(123), time.truncate(0));
         assertEquals(new Time(123, 456789321), time.truncate(9));
+        assertThrows(
+                RuntimeException.class,
+                () -> time.truncate(-1));
+        assertThrows(
+                RuntimeException.class,
+                () -> time.truncate(10));
     }
 
     @Test
@@ -104,5 +119,8 @@ public class TimeTest extends GenericTest {
         assertEquals(Time.seconds(1), time.divide(100));
         assertEquals(Time.milliSeconds(100), time.divide(1000));
         assertEquals(Time.seconds(40), time.divide(2.5));
+        assertThrows(
+                RuntimeException.class,
+                () -> time.divide(-0.5));
     }
 }

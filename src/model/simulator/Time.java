@@ -218,7 +218,7 @@ public class Time implements Comparable<Time> {
      */
     public Time truncate(int precision) {
         if (precision < 0) {
-            Logger.getInstance().log(LogSeverity.CRITICAL, "Precision must be positive or null");
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Precision must be at most a second");
         }
         if (precision > 9) {
             Logger.getInstance().log(LogSeverity.CRITICAL, "Precision cannot be higher than a nanosecond");
