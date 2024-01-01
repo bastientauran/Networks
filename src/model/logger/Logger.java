@@ -129,7 +129,7 @@ public class Logger {
             return;
         }
         StackTraceElement ste = stes[2];
-        String output = "[" + Simulator.getInstance().getCurrentTime() + "]";
+        String output = "[" + Simulator.getInstance().getCurrentTime().toStringWithPrecision(6) + "]";
         output += "[" + logSeverity + "]";
         output += "[" + ste.getClassName() + "." + ste.getMethodName() + ":" + ste.getLineNumber() + "] ";
         output += message;

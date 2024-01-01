@@ -123,4 +123,41 @@ public class TimeTest extends GenericTest {
                 RuntimeException.class,
                 () -> time.divide(-0.5));
     }
+
+    @Test
+    public void testToString() {
+        Time time = new Time(10, 123456789);
+        assertEquals("10s123456789ns", time.toString());
+        assertEquals("10.12s", time.toStringWithPrecision(2));
+        assertEquals("10s", time.toStringWithPrecision(0));
+        assertEquals("10.123456789s", time.toStringWithPrecision(9));
+
+        assertThrows(
+                RuntimeException.class,
+                () -> time.toStringWithPrecision(-1));
+        assertThrows(
+                RuntimeException.class,
+                () -> time.toStringWithPrecision(10));
+
+        Time time2 = Time.seconds(42);
+        assertEquals("42s0ns", time2.toString());
+        assertEquals("42s", time2.toStringWithPrecision(2));
+        assertEquals("42s", time2.toStringWithPrecision(0));
+        assertEquals("42s", time2.toStringWithPrecision(9));
+
+        Time time3 = Time.milliSeconds(12789);
+        assertEquals("12s789000000ns", time3.toString());
+        assertEquals("12s", time3.toStringWithPrecision(0));
+        assertEquals("12.78s", time3.toStringWithPrecision(2));
+        assertEquals("12.789s", time3.toStringWithPrecision(3));
+        assertEquals("12.789s", time3.toStringWithPrecision(4));
+        assertEquals("12.789s", time3.toStringWithPrecision(9));
+
+        Time time4 = Time.nanoSeconds(100);
+        assertEquals("0s100ns", time4.toString());
+        assertEquals("0s", time4.toStringWithPrecision(0));
+        assertEquals("0s", time4.toStringWithPrecision(2));
+        assertEquals("0.0000001s", time4.toStringWithPrecision(7));
+        assertEquals("0.0000001s", time4.toStringWithPrecision(9));
+    }
 }

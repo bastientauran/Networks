@@ -141,7 +141,7 @@ public class Simulator implements Schedulable {
      * Print progress bar
      */
     public void printProgressBar() {
-        System.out.println("Progress: " + this.currentTime.getSeconds() + "/" + this.stopTime.getSeconds());
+        System.out.println("Progress: " + this.currentTime.toStringWithPrecision(3) + "/" + this.stopTime.toStringWithPrecision(3));
 
         schedule(this.currentTime.add(this.progressBarStep), this, SchedulableMethod.SIMULATOR__PRINT_PROGRESS_BAR);
     }

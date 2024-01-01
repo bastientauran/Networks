@@ -287,6 +287,32 @@ public class Time implements Comparable<Time> {
         return this.seconds + "s" + this.nanoSeconds + "ns";
     }
 
+    public String toStringWithPrecision(int precision) {
+        if (precision < 0) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Precision must be at most a second");
+        }
+        if (precision > 9) {
+            Logger.getInstance().log(LogSeverity.CRITICAL, "Precision cannot be higher than a nanosecond");
+        }
+
+        if (precision == 0 || this.nanoSeconds == 0) {
+            return this.seconds + "s";
+        }
+
+        Time t = this.truncate(precision);
+        String time = String
+                .format("%." + precision + "f", t.seconds + 1.0 * t.nanoSeconds / Time.NANOSECONDS_IN_SECOND)
+                .replace(",", ".");
+        while (time.charAt(time.length() - 1) == '0') {
+            time = time.substring(0, time.length() - 1);
+        }
+        if (time.charAt(time.length() - 1) == '.') {
+            time = time.substring(0, time.length() - 1);
+        }
+
+        return time + "s";
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this)
