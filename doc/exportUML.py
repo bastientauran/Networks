@@ -1,4 +1,4 @@
-#Launch from root folder of repository using: python3 doc/exportUML.py
+#Launch from root folder of repository using: python3 .\doc\exportUML.py --ignorePackage test
 
 import os
 import glob
