@@ -52,13 +52,8 @@ public class MacAddressContainer {
             for (int i = 0; i < 6; i++) {
                 values[i] = (int) (256 * Math.random());
             }
-            try {
-                address = new MacAddress(values);
-                break;
-            } catch (IllegalStateException e) {
-                continue;
-            }
-        } while (true);
+            address = new MacAddress(values, false);
+        } while (!this.addMacAddress(address));
 
         this.addresses.add(address);
 

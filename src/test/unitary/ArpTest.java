@@ -10,17 +10,17 @@ import org.junit.Test;
 
 import model.network.IpAddress;
 import model.network.MacAddress;
-import model.nodes.ArpTable;
+import model.node.ArpTable;
 
-public class ArpTest {
+public class ArpTest extends GenericTest {
 
     @Test
     public void testWrongEntry() {
         ArpTable table = new ArpTable();
         IpAddress ipAddress = new IpAddress("192.168.100.0/24");
-        MacAddress macAddress = new MacAddress("11:22:33:44:55:70");
+        MacAddress macAddress = new MacAddress("11:22:33:44:55:70", true);
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> table.addEntry(ipAddress, macAddress));
     }
 
@@ -28,7 +28,7 @@ public class ArpTest {
     public void testOneEntry() {
         ArpTable table = new ArpTable();
         IpAddress ipAddress = new IpAddress("192.168.100.2/32");
-        MacAddress macAddress = new MacAddress("11:22:33:44:55:71");
+        MacAddress macAddress = new MacAddress("11:22:33:44:55:71", true);
         table.addEntry(ipAddress, macAddress);
         assertTrue(table.hasEntry(ipAddress));
         assertEquals(macAddress, table.getEntry(ipAddress));
@@ -39,7 +39,7 @@ public class ArpTest {
         ArpTable table = new ArpTable();
         IpAddress ipAddress = new IpAddress("192.168.100.2/32");
         IpAddress ipAddress2 = new IpAddress("192.168.100.3/32");
-        MacAddress macAddress = new MacAddress("11:22:33:44:55:72");
+        MacAddress macAddress = new MacAddress("11:22:33:44:55:72", true);
         assertFalse(table.hasEntry(ipAddress));
         table.addEntry(ipAddress, macAddress);
         assertTrue(table.hasEntry(ipAddress));
@@ -51,10 +51,10 @@ public class ArpTest {
     public void testUpdateEntry() {
         ArpTable table = new ArpTable();
         IpAddress ipAddress = new IpAddress("192.168.100.2/32");
-        MacAddress macAddress = new MacAddress("11:22:33:44:55:73");
-        MacAddress macAddress2 = new MacAddress("11:22:33:44:55:74");
+        MacAddress macAddress = new MacAddress("11:22:33:44:55:73", true);
+        MacAddress macAddress2 = new MacAddress("11:22:33:44:55:74", true);
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> table.updateEntry(ipAddress, macAddress));
         table.addEntry(ipAddress, macAddress);
         assertTrue(table.hasEntry(ipAddress));
@@ -69,8 +69,8 @@ public class ArpTest {
         ArpTable table = new ArpTable();
         IpAddress ipAddress = new IpAddress("192.168.100.2/32");
         IpAddress ipAddress2 = new IpAddress("192.168.101.2/32");
-        MacAddress macAddress = new MacAddress("11:22:33:44:55:75");
-        MacAddress macAddress2 = new MacAddress("11:22:33:44:55:76");
+        MacAddress macAddress = new MacAddress("11:22:33:44:55:75", true);
+        MacAddress macAddress2 = new MacAddress("11:22:33:44:55:76", true);
 
         table.addEntry(ipAddress, macAddress);
         table.addEntry(ipAddress2, macAddress2);

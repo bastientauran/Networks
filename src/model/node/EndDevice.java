@@ -1,5 +1,10 @@
-package model.nodes;
+package model.node;
 
+import model.io.Layer;
+import model.io.PacketEvent;
+import model.io.PacketTracer;
+import model.logger.LogSeverity;
+import model.logger.Logger;
 import model.network.Header;
 import model.network.HeaderType;
 import model.network.IpAddress;
@@ -7,7 +12,7 @@ import model.network.IpHeader;
 import model.network.Packet;
 import model.simulator.Schedulable;
 import model.simulator.SchedulableMethod;
-import utils.Pair;
+import model.utils.Pair;
 
 /**
  * Class representing a End Device
@@ -29,10 +34,12 @@ public class EndDevice extends Node implements Schedulable {
 
     @Override
     public void send(Packet packet, IpAddress addressDst) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Send packet " + packet.getPacketId() + " to " + addressDst);
+
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() == HeaderType.IP_HEADER) {
-                throw new IllegalStateException("Packet cannot already have IP header");
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Packet cannot already have IP header");
             }
         }
 
@@ -41,24 +48,32 @@ public class EndDevice extends Node implements Schedulable {
             IpAddress addressSrc = routingEntry.first.getIpAddress();
 
             if (addressSrc == null) {
-                throw new IllegalArgumentException("Source IP address not set");
+                Logger.getInstance().log(LogSeverity.ERROR, "Source IP address not set");
+                return;
             }
 
             IpHeader ipHeader = new IpHeader(addressSrc, addressDst);
             packet.addHeader(ipHeader);
 
+            PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.SEND, packet);
+
             routingEntry.first.enque(packet, routingEntry.second);
         } else {
-            System.out.println("No route to destination, dropping packet");
+            PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.DROP, packet);
+            Logger.getInstance().log(LogSeverity.WARNING, "No route to destination, dropping packet");
         }
     }
 
     @Override
     public void receive(Packet packet) {
+        Logger.getInstance().log(LogSeverity.DEBUG, "Receive packet " + packet.getPacketId());
+
+        PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.RECEIVE, packet);
+
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() != HeaderType.IP_HEADER) {
-                throw new IllegalStateException("Packet does not have an IP header");
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Packet does not have an IP header");
             }
         }
         IpHeader header = (IpHeader) currentHeader;
@@ -70,27 +85,28 @@ public class EndDevice extends Node implements Schedulable {
                 return;
             }
         }
-
-        forward(packet);
     }
 
-    @Override
-    public void forward(Packet packet) {
-        Header currentHeader = packet.peekHeader();
-        if (currentHeader != null) {
-            if (currentHeader.getType() != HeaderType.IP_HEADER) {
-                throw new IllegalStateException("Packet does not have an IP header");
-            }
-        }
-
-        IpHeader header = (IpHeader) currentHeader;
-        Pair<Interface, IpAddress> routingEntry = this.routingTable.getEntry(header.getDestination());
-        if (routingEntry != null) {
-            routingEntry.first.enque(packet, routingEntry.second);
-        } else {
-            System.out.println("No route to destination, dropping packet");
-        }
-    }
+    // Only for routers
+    /*
+     * public void forward(Packet packet) {
+     * Header currentHeader = packet.peekHeader();
+     * if (currentHeader != null) {
+     * if (currentHeader.getType() != HeaderType.IP_HEADER) {
+     * // CRITICAL ERROR
+     * }
+     * }
+     * 
+     * IpHeader header = (IpHeader) currentHeader;
+     * Pair<Interface, IpAddress> routingEntry =
+     * this.routingTable.getEntry(header.getDestination());
+     * if (routingEntry != null) {
+     * routingEntry.first.enque(packet, routingEntry.second);
+     * } else {
+     * System.out.println("No route to destination, dropping packet");
+     * }
+     * }
+     */
 
     @Override
     public void run(SchedulableMethod method, Object[] arguments) {
@@ -100,7 +116,7 @@ public class EndDevice extends Node implements Schedulable {
                 break;
             }
             default: {
-                throw new IllegalArgumentException("Unknow method for class EndDevice: " + method);
+                Logger.getInstance().log(LogSeverity.CRITICAL, "Unknow method for class EndDevice: " + method);
             }
         }
     }

@@ -6,7 +6,10 @@ name: Deploy Javadoc
 on:
   push:
     branches:
-      - '*'
+      - main
+  pull_request:
+    breanches:
+      - main
 
 jobs:
   build-and-deploy:
@@ -19,7 +22,7 @@ jobs:
           with:
             distribution: 'zulu'
             java-version: '17'
-        - run: javadoc -d doc/javadoc -sourcepath src -subpackages model.nodes model.network model.link model.simulator
+        - run: javadoc -d doc/javadoc -sourcepath src -subpackages example helper model.io model.link model.logger model.network model.node model.simulator model.utils
         - name: Deploy 🚀
           uses: JamesIves/github-pages-deploy-action@v4.2.3
           with:
