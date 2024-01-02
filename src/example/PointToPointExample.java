@@ -55,7 +55,7 @@ public class PointToPointExample {
         nodeDst.getArpTable().addEntry(new IpAddress("192.168.0.1"), interfaceSrc.getMacAddress());
 
         Simulator.getInstance().reset();
-        Simulator.getInstance().setStopTime(new Time(1000, 0));
+        Simulator.getInstance().setStopTime(new Time(100, 0));
         Simulator.getInstance().setScenarioName("PointToPointExample");
         Simulator.getInstance().enableProgressBar();
 

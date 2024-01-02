@@ -75,7 +75,7 @@ public class PacketTracer {
      */
     public void tracePacket(int nodeId, Layer layer, PacketEvent event, Packet packet) {
         if (this.writer != null) {
-            this.writer.write(Simulator.getInstance().getCurrentTime() + " ");
+            this.writer.write(Simulator.getInstance().getCurrentTime().toStringWithPrecision(6) + " ");
             this.writer.write(nodeId + " " + layer + " " + event + " ");
             this.writer.write(packet.formatToTrace() + "\n");
         }

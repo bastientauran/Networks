@@ -141,7 +141,8 @@ public class Simulator implements Schedulable {
      * Print progress bar
      */
     public void printProgressBar() {
-        System.out.println("Progress: " + this.currentTime.getSeconds() + "/" + this.stopTime.getSeconds());
+        System.out.println("Progress: " + this.currentTime.toStringWithPrecision(3) + "/"
+                + this.stopTime.toStringWithPrecision(3));
 
         schedule(this.currentTime.add(this.progressBarStep), this, SchedulableMethod.SIMULATOR__PRINT_PROGRESS_BAR);
     }
@@ -188,11 +189,7 @@ public class Simulator implements Schedulable {
             if (this.stopTime.compareTo(new Time(10, 0)) < 0) {
                 this.progressBarStep = new Time(0, 100000000);
             } else {
-                double seconds = this.stopTime.getSeconds();
-                double step = seconds / 100;
-                int stepSeconds = (int) step;
-                int stepNanoseconds = (int) (1000000000 * (step - stepSeconds));
-                this.progressBarStep = new Time(stepSeconds, stepNanoseconds);
+                this.progressBarStep = this.stopTime.divide(100);
             }
 
             schedule(this.progressBarStep, this, SchedulableMethod.SIMULATOR__PRINT_PROGRESS_BAR);
