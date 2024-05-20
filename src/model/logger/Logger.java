@@ -1,5 +1,6 @@
 package model.logger;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -86,13 +87,19 @@ public class Logger {
     /**
      * Set the path to where the trace will be printed
      * 
-     * @param path Output path. If empty, print to the console
+     * @param directory Output directory. If empty, print to the console
+     * @param fileName  Log file name
      */
-    public void setOutputPath(String path) {
+    public void setOutputPath(String directory, String fileName) {
         try {
-            this.writer = new PrintWriter(new FileWriter(path));
+            File dir = new File(directory);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            this.writer = new PrintWriter(new FileWriter(directory + "/" + fileName));
         } catch (IOException e) {
-            Logger.getInstance().log(LogSeverity.CRITICAL, "Cannot open " + path + " for log");
+            Logger.getInstance().log(LogSeverity.CRITICAL,
+                    "Cannot open " + directory + "/" + fileName + " for logging");
         }
     }
 
