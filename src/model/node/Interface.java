@@ -106,7 +106,8 @@ public class Interface {
         MacAddress dstMacAddress = arpTable.getEntry(nextHop);
 
         if (dstMacAddress == null) {
-            Logger.getInstance().log(LogSeverity.WARNING, "Do not know destination MAC address, dropping packet");
+            Logger.getInstance().log(LogSeverity.WARNING, "Do not know destination MAC address for " + nextHop + " on "
+                    + this.node.getName() + ", dropping packet");
             return false;
         }
 
