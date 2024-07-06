@@ -24,12 +24,19 @@ import model.utils.Pair;
 public class EndDevice extends Node implements Schedulable {
 
     /**
+     * Counter to the number of packets received
+     */
+    private long getPacketsReceived;
+
+    /**
      * End Device constructor
      * 
      * @param name Name of this node
      */
     public EndDevice(String name) {
         super(name);
+
+        this.getPacketsReceived = 0;
     }
 
     @Override
@@ -80,33 +87,12 @@ public class EndDevice extends Node implements Schedulable {
         IpAddress destination = header.getDestination();
 
         for (Interface interf : this.interfaces) {
-            if (interf.getIpAddress().equals(destination)) {
-                System.out.println("Received packet " + packet);
+            if (interf.getIpAddress().equalsNoMask(destination)) {
+                this.getPacketsReceived++;
                 return;
             }
         }
     }
-
-    // Only for routers
-    /*
-     * public void forward(Packet packet) {
-     * Header currentHeader = packet.peekHeader();
-     * if (currentHeader != null) {
-     * if (currentHeader.getType() != HeaderType.IP_HEADER) {
-     * // CRITICAL ERROR
-     * }
-     * }
-     * 
-     * IpHeader header = (IpHeader) currentHeader;
-     * Pair<Interface, IpAddress> routingEntry =
-     * this.routingTable.getEntry(header.getDestination());
-     * if (routingEntry != null) {
-     * routingEntry.first.enque(packet, routingEntry.second);
-     * } else {
-     * System.out.println("No route to destination, dropping packet");
-     * }
-     * }
-     */
 
     @Override
     public void run(SchedulableMethod method, Object[] arguments) {
@@ -119,5 +105,13 @@ public class EndDevice extends Node implements Schedulable {
                 Logger.getInstance().log(LogSeverity.CRITICAL, "Unknow method for class EndDevice: " + method);
             }
         }
+    }
+
+    /**
+     * Get the total number of packets received by this node
+     * @return The number of packets received
+     */
+    public long getNumberPacketsReceived() {
+        return this.getPacketsReceived;
     }
 }

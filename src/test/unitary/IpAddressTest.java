@@ -2,6 +2,7 @@ package test.unitary;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -39,7 +40,18 @@ public class IpAddressTest extends GenericTest {
    public void testEquals() {
       IpAddress address1 = new IpAddress(new int[] { 192, 168, 0, 1 }, 20);
       IpAddress address2 = new IpAddress("192.168.0.1/20");
+      IpAddress address3 = new IpAddress("192.168.0.1/24");
       assertEquals(address1, address2);
+      assertNotEquals(address2, address3);
+   }
+
+   @Test
+   public void testEqualsNoMask() {
+      IpAddress address1 = new IpAddress(new int[] { 192, 168, 0, 1 }, 20);
+      IpAddress address2 = new IpAddress("192.168.0.1/20");
+      IpAddress address3 = new IpAddress("192.168.0.1/24");
+      assertTrue(address1.equalsNoMask(address2));
+      assertTrue(address2.equalsNoMask(address3));
    }
 
    @Test

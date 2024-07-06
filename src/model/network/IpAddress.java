@@ -207,6 +207,22 @@ public class IpAddress implements Comparable<IpAddress> {
         return ipAddress.getNetwork().equals(network.getNetwork());
     }
 
+    /**
+     * Compare two IP addresses without comparing network masks
+     * 
+     * @param ipAddress Other IP address
+     * @return true if same IP address, false otherwise
+     */
+    public boolean equalsNoMask(IpAddress ipAddress) {
+        for (int i = 1; i < 4; i++) {
+            if (this.address[i] != ipAddress.address[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this)

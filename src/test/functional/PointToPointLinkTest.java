@@ -52,6 +52,8 @@ public class PointToPointLinkTest {
         Simulator.getInstance().run();
 
         assertEquals(new Time(51, 0), Simulator.getInstance().getCurrentTime());
+
+        assertEquals(1, nodeDst.getNumberPacketsReceived());
     }
 
     @Test
@@ -63,7 +65,7 @@ public class PointToPointLinkTest {
         Pair<Interface, Interface> interfaces = p2pHelper.install(nodeSrc, nodeDst, new IpAddress("192.168.0.0/24"));
 
         Interface interfaceSrc = interfaces.first;
-        Interface interfaceDst = interfaces.first;
+        Interface interfaceDst = interfaces.second;
 
         nodeSrc.getRoutingTable().addEntry(new IpAddress("192.168.0.0/24"), interfaceSrc, new IpAddress("192.168.0.2"));
         nodeDst.getRoutingTable().addEntry(new IpAddress("192.168.0.0/24"), interfaceDst, new IpAddress("192.168.0.1"));
@@ -80,6 +82,8 @@ public class PointToPointLinkTest {
         Simulator.getInstance().run();
 
         assertEquals(new Time(51, 0), Simulator.getInstance().getCurrentTime());
+
+        assertEquals(1, nodeDst.getNumberPacketsReceived());
     }
 
     @Test
@@ -91,7 +95,7 @@ public class PointToPointLinkTest {
         Pair<Interface, Interface> interfaces = p2pHelper.install(nodeSrc, nodeDst, new IpAddress("192.168.0.2/24"), new IpAddress("192.168.0.4/24"));
 
         Interface interfaceSrc = interfaces.first;
-        Interface interfaceDst = interfaces.first;
+        Interface interfaceDst = interfaces.second;
 
         nodeSrc.getRoutingTable().addEntry(new IpAddress("192.168.0.0/24"), interfaceSrc, new IpAddress("192.168.0.4"));
         nodeDst.getRoutingTable().addEntry(new IpAddress("192.168.0.0/24"), interfaceDst, new IpAddress("192.168.0.2"));
@@ -108,6 +112,8 @@ public class PointToPointLinkTest {
         Simulator.getInstance().run();
 
         assertEquals(new Time(51, 0), Simulator.getInstance().getCurrentTime());
+
+        assertEquals(1, nodeDst.getNumberPacketsReceived());
     }
 
     @Test
@@ -146,6 +152,8 @@ public class PointToPointLinkTest {
         Simulator.getInstance().run();
 
         assertEquals(new Time(55, 0), Simulator.getInstance().getCurrentTime());
+
+        assertEquals(5, nodeDst.getNumberPacketsReceived());
     }
 
     @Test
@@ -186,6 +194,8 @@ public class PointToPointLinkTest {
         Simulator.getInstance().run();
 
         assertEquals(new Time(65, 1000 + 500000000), Simulator.getInstance().getCurrentTime());
+
+        assertEquals(6, nodeDst.getNumberPacketsReceived());
     }
 
     @Test
@@ -224,6 +234,8 @@ public class PointToPointLinkTest {
         Simulator.getInstance().run();
 
         assertEquals(new Time(52, 0), Simulator.getInstance().getCurrentTime());
+
+        assertEquals(2, nodeDst.getNumberPacketsReceived());
     }
 
     @Test
@@ -264,5 +276,7 @@ public class PointToPointLinkTest {
         Simulator.getInstance().run();
 
         assertEquals(new Time(61, 0), Simulator.getInstance().getCurrentTime());
+
+        assertEquals(11, nodeDst.getNumberPacketsReceived());
     }
 }
