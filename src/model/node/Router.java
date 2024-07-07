@@ -64,6 +64,8 @@ public class Router extends Node {
 
     @Override
     public void receive(Packet packet) {
+        PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.RECEIVE, packet);
+
         Header currentHeader = packet.peekHeader();
         if (currentHeader != null) {
             if (currentHeader.getType() != HeaderType.IP_HEADER) {
@@ -74,7 +76,11 @@ public class Router extends Node {
         IpHeader header = (IpHeader) currentHeader;
         Pair<Interface, IpAddress> routingEntry = this.routingTable.getEntry(header.getDestination());
         if (routingEntry != null) {
-            Logger.getInstance().log(LogSeverity.DEBUG, "Forward packet " + packet.getPacketId() + " to " + header.getDestination());
+            Logger.getInstance().log(LogSeverity.DEBUG,
+                    "Forward packet " + packet.getPacketId() + " to " + header.getDestination());
+
+            PacketTracer.getInstance().tracePacket(this.getNodeId(), Layer.NETWORK, PacketEvent.SEND, packet);
+
             routingEntry.first.enque(packet, routingEntry.second);
         } else {
             System.out.println("No route to destination, dropping packet");

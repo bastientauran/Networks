@@ -69,6 +69,7 @@ public class PointToPointHelper {
         Interface interfaceSrc = new Interface("ens" + (src.getNumberInterfaces() + 3), src, pointToPointLink);
         Interface interfaceDst = new Interface("ens" + (dst.getNumberInterfaces() + 3), dst, pointToPointLink);
 
+        // TODO do not add IP address if switch + test it
         IpAddress net = network.getNetwork();
         IpAddress ipAddressSrc = net.getNextAddress();
         IpAddress ipAddressDst = ipAddressSrc.getNextAddress();
